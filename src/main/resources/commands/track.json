@@ -1,0 +1,24 @@
+{
+  "name": "track",
+  "description": "Gestion du tracking des parties",
+  "options": [
+    {
+      "name": "etat",
+      "description": "Active ou désactive le tracking",
+      "type": 5,
+      "required": false
+    },
+    {
+      "name": "summoner",
+      "description": "Change le joueur suivi",
+      "type": 3,
+      "required": false
+    },
+    {
+      "name": "champion",
+      "description": "Change le champion suivi",
+      "type": 3,
+      "required": false
+    }
+  ]
+}

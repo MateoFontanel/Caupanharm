@@ -1,0 +1,53 @@
+{
+  "name": "link",
+  "description": "Manage your linked Riot account",
+  "options": [
+    {
+          "name": "add",
+          "description": "Link your Riot account",
+          "type": 1,
+          "required": false,
+          "options": [
+            {
+              "name": "username",
+              "description": "Riot Username (what comes before '#')",
+              "type": 3,
+              "required": true
+            },
+            {
+              "name": "tagline",
+              "description": "Riot Tagline (what comes after '#')",
+              "type": 3,
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "edit",
+          "description": "Replace your currently linked Riot account",
+          "type": 1,
+          "required": false,
+          "options": [
+            {
+              "name": "username",
+              "description": "Riot Username (what comes before '#')",
+              "type": 3,
+              "required": true
+            },
+            {
+              "name": "tagline",
+              "description": "Username Tagline (what comes after '#')",
+              "type": 3,
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "remove",
+          "description": "Remove your currently linked Riot",
+          "type": 1,
+          "required": false
+        }
+      ]
+
+}
