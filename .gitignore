@@ -12,6 +12,9 @@ buildNumber.properties
 .idea/
 .mvn/
 HELP.md
+mvnw
+mvnw.cmd
+application.properties
 
 # Eclipse m2e generated files
 # Eclipse Core
@@ -44,6 +47,3 @@ HELP.md
 hs_err_pid*
 replay_pid*
 
-# Others
-*.pem
-*.properties
