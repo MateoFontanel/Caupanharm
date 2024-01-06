@@ -71,7 +71,7 @@ public class SpringBot {
         public GatewayDiscordClient gatewayDiscordClient() {
             return DiscordClientBuilder.create(propertyController.getDiscordBotToken()).build()
                     .gateway()
-                    .setInitialPresence(ignore -> ClientPresence.online(ClientActivity.listening("to /commands")))
+                    .setInitialPresence(ignore -> ClientPresence.online(ClientActivity.listening("Herrahan")))
                     .login()
                     .block();
         }

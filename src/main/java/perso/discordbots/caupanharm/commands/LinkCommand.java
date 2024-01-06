@@ -3,13 +3,22 @@ package perso.discordbots.caupanharm.commands;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandInteractionOption;
 import discord4j.core.object.command.ApplicationCommandInteractionOptionValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import perso.discordbots.caupanharm.SpringBot;
 import perso.discordbots.caupanharm.controllers.UserController;
+import perso.discordbots.caupanharm.databases.CaupanharmUser;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
+// TODO check
 @Component
 public class LinkCommand implements SlashCommand {
+    private final static Logger logger = LoggerFactory.getLogger(LinkCommand.class);
+
 
     @Autowired
     UserController userController;
@@ -21,19 +30,53 @@ public class LinkCommand implements SlashCommand {
 
     @Override
     public Mono<Void> handle(ChatInputInteractionEvent event) {
-        String response = "todo remove and initialize in ifelse";
+        String discordId = event.getInteraction().getUser().getId().asString();
+        CaupanharmUser registeredUser = userController.getUser("discordId",discordId);
+        String response;
         if(event.getOption("add").isPresent()){
             String username = getSubcommandValue(event, "add", "username");
             String tagline = getSubcommandValue(event, "add", "tagline");
-            userController.insertUser(event.getInteraction().getUser().getId().asString(),"todo",username+"#"+tagline);
+            if(registeredUser == null){
+                if(userController.getUser("riotUsername",username+"#"+tagline) != null){
+                    response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
+                }else{
+                    userController.insertUser(discordId,"todo",username+"#"+tagline);
+                    response = "Account "+username+"#"+tagline+" is now linked to Caupanharm";
+                }
+            }else{
+                response = "**Error:** You already linked an account to Caupanharm ("+registeredUser.getRiotUsername()+")";
+            }
 
         } else if (event.getOption("edit").isPresent()) {
             String username = getSubcommandValue(event, "edit", "username");
             String tagline = getSubcommandValue(event, "edit", "tagline");
-            userController.updateUser("discordId",event.getInteraction().getUser().getId().asString(),"riotUsername",username+"#"+tagline);
+            if(registeredUser != null){
+                CaupanharmUser checkedUser = userController.getUser("riotUsername",username+"#"+tagline);
 
-        }else{
-            userController.deleteUser("discordId",event.getInteraction().getUser().getId().asString());
+                if(checkedUser != null){
+                    if(Objects.equals(checkedUser.getDiscordId(), discordId)){
+                        response = "**Error:** You are already linked to this Riot account";
+                    }else{
+                        response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
+                    }
+                }else{
+                    userController.updateUser("discordId", discordId, "riotUsername", username + "#" + tagline);
+                    response = "Your linked account was updated from "+registeredUser.getRiotUsername()+" to "+username+"#"+tagline;
+                }
+            }else{
+                response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add* instead";
+            }
+        }else if (event.getOption("remove").isPresent()){
+            if(registeredUser != null) {
+                userController.deleteUser("discordId", event.getInteraction().getUser().getId().asString());
+                response = "Your account ("+registeredUser.getRiotUsername()+") was successfully deleted from Caupanharm";
+            }else{
+                response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add*";
+            }
+        }else{// last possible option: "check" (option being a mandatory field, this is safe)
+            response = (registeredUser != null) ?
+                    "You are currently linked to "+registeredUser.getRiotUsername() :
+                    "You didn't link your Riot account to Caupanharm yet\nTry using */link add*";
         }
 
         return event.reply()

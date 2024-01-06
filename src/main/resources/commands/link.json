@@ -44,10 +44,16 @@
         },
         {
           "name": "remove",
-          "description": "Remove your currently linked Riot",
+          "description": "Remove your currently linked Riot account",
           "type": 1,
           "required": false
-        }
+        },
+    {
+      "name": "check",
+      "description": "Check your currently linked Riot account",
+      "type": 1,
+      "required": false
+    }
       ]
 
 }
