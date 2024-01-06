@@ -15,6 +15,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import perso.discordbots.caupanharm.controllers.MongoController;
 import perso.discordbots.caupanharm.controllers.PropertyController;
+import perso.discordbots.caupanharm.controllers.UserController;
 
 
 @SpringBootApplication
@@ -54,9 +55,10 @@ public class SpringBot {
         return tracker;
     }
 
+
         @Bean
-        public MongoController getMongoController(){
-            return new MongoController("caupanharm_db");
+        public UserController getUserController(){
+            return new UserController("caupanharm_db");
         }
 
         @Bean
