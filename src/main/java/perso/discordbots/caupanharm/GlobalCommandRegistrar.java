@@ -36,7 +36,7 @@ public class GlobalCommandRegistrar implements ApplicationRunner {
         // Convenience variables for the sake of easier to read code below.
         PathMatchingResourcePatternResolver matcher = new PathMatchingResourcePatternResolver();
         final ApplicationService applicationService = client.getApplicationService();
-        final long applicationId = client.getApplicationId().block();
+        final long applicationId = client.getApplicationId().block(); // client is initialized in @SpringBootApplication class so it should actually never be null
 
         //Get our commands json from resources as command data
         List<ApplicationCommandRequest> commands = new ArrayList<>();

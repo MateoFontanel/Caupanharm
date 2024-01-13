@@ -3,12 +3,17 @@ package perso.discordbots.caupanharm.controllers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
+@Deprecated // This method was used to initialize variables from the application.properties file without creating circular references, before I understood the use of @PostConstruct :)
 @Controller
 public class PropertyController {
     private static String RIOT_API_KEY;
     private static String DISCORD_BOT_TOKEN;
     private static String MONGODB_ADMIN_USR;
     private static String MONGODB_ADMIN_PWD;
+
+    public PropertyController(){
+
+    }
 
     @Value("${riot_api_key}")
     public void setRiotApiKey(String riot_api_key){

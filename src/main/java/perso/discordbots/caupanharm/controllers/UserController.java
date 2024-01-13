@@ -1,7 +1,5 @@
 package perso.discordbots.caupanharm.controllers;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -9,14 +7,13 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import perso.discordbots.caupanharm.databases.CaupanharmUser;
 
-import java.util.List;
+
 
 public class UserController extends MongoController{
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);

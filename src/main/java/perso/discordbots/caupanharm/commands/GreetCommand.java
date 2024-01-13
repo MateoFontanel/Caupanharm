@@ -21,6 +21,7 @@ public class GreetCommand implements SlashCommand {
 
         In this case, there is no fear it will return empty/null as this is marked "required: true" in our json.
          */
+        //noinspection OptionalGetWithoutIsPresent
         String name = event.getOption("name")
                 .flatMap(ApplicationCommandInteractionOption::getValue)
                 .map(ApplicationCommandInteractionOptionValue::asString)

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import perso.discordbots.caupanharm.SpringBot;
 import perso.discordbots.caupanharm.controllers.UserController;
 import perso.discordbots.caupanharm.databases.CaupanharmUser;
 import reactor.core.publisher.Mono;
@@ -84,10 +83,11 @@ public class LinkCommand implements SlashCommand {
                 .withContent(response);
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private String getSubcommandValue(ChatInputInteractionEvent event, String subcommandOption, String subcommandValue){
         return event.getOption(subcommandOption).get().getOption(subcommandValue)
                 .flatMap(ApplicationCommandInteractionOption::getValue)
                 .map(ApplicationCommandInteractionOptionValue::asString)
-                .get();
+                .get(); //This is warning us that we didn't check if its present, we can ignore this on required options
     }
 }

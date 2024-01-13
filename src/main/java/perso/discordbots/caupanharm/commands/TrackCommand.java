@@ -15,6 +15,7 @@ public class TrackCommand implements SlashCommand{
         return "track";
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public Mono<Void> handle(ChatInputInteractionEvent event) {
         //System.out.println(riot_api_key);
@@ -26,7 +27,7 @@ public class TrackCommand implements SlashCommand{
             boolean etat = event.getOption("etat")
                     .flatMap(ApplicationCommandInteractionOption::getValue)
                     .map(ApplicationCommandInteractionOptionValue::asBoolean)
-                    .get();
+                    .get(); //This is warning us that we didn't check if its present, we can ignore this on required options
 
             String response;
             if(etat){
@@ -46,12 +47,12 @@ public class TrackCommand implements SlashCommand{
             String summoner = event.getOption("summoner")
                     .flatMap(ApplicationCommandInteractionOption::getValue)
                     .map(ApplicationCommandInteractionOptionValue::asString)
-                    .get();
+                    .get(); //This is warning us that we didn't check if its present, we can ignore this on required options
 
             String champion = event.getOption("champion")
                     .flatMap(ApplicationCommandInteractionOption::getValue)
                     .map(ApplicationCommandInteractionOptionValue::asString)
-                    .get();
+                    .get(); //This is warning us that we didn't check if its present, we can ignore this on required options
 
             SpringBot.setTracker(summoner, champion);
 
