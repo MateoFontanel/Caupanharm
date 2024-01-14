@@ -9,14 +9,12 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-// TODO Find how to remove unnecessary logs
 @Controller
 public class MongoController {
     private final static Logger logger = LoggerFactory.getLogger(MongoController.class);
@@ -27,7 +25,7 @@ public class MongoController {
     MongoDatabase database;
     MongoClient mongoClient;
 
-    public MongoController(){
+    public MongoController() {
         connectionString = null;
         settings = null;
         dbName = null;
@@ -44,9 +42,8 @@ public class MongoController {
     }
 
 
-
     @PostConstruct
-    void init(){
+    void init() {
         connectionString = new ConnectionString("mongodb+srv://" + mongodb_admin_usr + ":" + mongodb_admin_pwd + "@cluster0.ttjwtey.mongodb.net/?retryWrites=true&w=majority");
 
         // a CodecRegistry tells the Driver how to move data between Java POJOs (Plain Old Java Objects) and MongoDB documents
@@ -60,7 +57,7 @@ public class MongoController {
                 .applyConnectionString(connectionString).build();
     }
 
-    void openClient(MongoClientSettings settings, String dbName){
+    void openClient(MongoClientSettings settings, String dbName) {
         try {
             mongoClient = MongoClients.create(settings);
             // MongoDatabase defines a connection to a specific MongoDB database
@@ -69,8 +66,6 @@ public class MongoController {
             logger.error("Unable to connect to the MongoDB instance due to an error: " + me);
         }
     }
-
-
 
 
 }
