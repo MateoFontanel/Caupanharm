@@ -7,8 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import perso.discordbots.caupanharm.controllers.RiotAPIController;
 import perso.discordbots.caupanharm.controllers.UserController;
-import perso.discordbots.caupanharm.databases.CaupanharmUser;
+import perso.discordbots.caupanharm.models.CaupanharmUser;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
@@ -18,15 +19,18 @@ import java.util.Objects;
 public class LinkCommand implements SlashCommand {
     private final static Logger logger = LoggerFactory.getLogger(LinkCommand.class);
 
-
     @Autowired
     UserController userController;
+
+    @Autowired
+    RiotAPIController riotAPIController;
 
     @Override
     public String getName() {
         return "link";
     }
 
+    //TODO remplacer les if en cascade par des elseif
     @Override
     public Mono<Void> handle(ChatInputInteractionEvent event) {
         String discordId = event.getInteraction().getUser().getId().asString();
@@ -39,8 +43,14 @@ public class LinkCommand implements SlashCommand {
                 if(userController.getUser("riotUsername",username+"#"+tagline) != null){
                     response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
                 }else{
-                    userController.insertUser(discordId,"todo",username+"#"+tagline);
-                    response = "Account "+username+"#"+tagline+" is now linked to Caupanharm";
+                    String riotPuuid = riotAPIController.getUserFromUsername(username, tagline).getPuuid();
+                    if(riotPuuid != null){
+                        userController.insertUser(discordId,riotPuuid,username+"#"+tagline);
+                        response = "Account "+username+"#"+tagline+" is now linked to Caupanharm";
+                    }else{
+                        response = "**Error: **This Riot account does not exist";
+                    }
+
                 }
             }else{
                 response = "**Error:** You already linked an account to Caupanharm ("+registeredUser.getRiotUsername()+")";
@@ -59,8 +69,14 @@ public class LinkCommand implements SlashCommand {
                         response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
                     }
                 }else{
-                    userController.updateUser("discordId", discordId, "riotUsername", username + "#" + tagline);
-                    response = "Your linked account was updated from "+registeredUser.getRiotUsername()+" to "+username+"#"+tagline;
+                    String riotPuuid = riotAPIController.getUserFromUsername(username, tagline).getPuuid();
+                    if(riotPuuid != null){
+                        userController.updateUser("discordId", discordId, "riotUsername", username + "#" + tagline);
+                        userController.updateUser("discordId", discordId, "riotPuuid", riotPuuid);
+                        response = "Your linked account was updated from "+registeredUser.getRiotUsername()+" to "+username+"#"+tagline;
+                    }else{
+                        response = "**Error: **This Riot account does not exist";
+                    }
                 }
             }else{
                 response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add* instead";

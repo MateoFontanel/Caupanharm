@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import perso.discordbots.caupanharm.controllers.PropertyController;
+import perso.discordbots.caupanharm.controllers.RiotAPIController;
 import perso.discordbots.caupanharm.controllers.UserController;
 
 
@@ -49,7 +50,10 @@ public class SpringBot {
     }
 
 
-
+    @Bean
+    public RiotAPIController riotAPIController(){
+        return new RiotAPIController();
+    }
 
     @Bean
     public UserController userController() {

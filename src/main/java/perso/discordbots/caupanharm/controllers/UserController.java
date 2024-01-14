@@ -11,7 +11,7 @@ import com.mongodb.client.result.InsertOneResult;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import perso.discordbots.caupanharm.databases.CaupanharmUser;
+import perso.discordbots.caupanharm.models.CaupanharmUser;
 
 
 
@@ -22,12 +22,13 @@ public class UserController extends MongoController{
         super(dbName);
     }
 
-    public void insertUser(String discordID, String riotId, String riotUsername){
+    public void insertUser(String discordID, String riotPuuid, String riotUsername){
         super.openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
         try {
-            InsertOneResult result = collection.insertOne(new CaupanharmUser(discordID,riotId, riotUsername));
-            logger.info("Created user: "+result);
+            CaupanharmUser newUser = new CaupanharmUser(discordID,riotPuuid,riotUsername);
+            collection.insertOne(newUser);
+            logger.info("Created user: "+newUser);
         } catch (MongoException me) {
             logger.error("Unable to insert any data into MongoDB due to an error: " + me);
         }

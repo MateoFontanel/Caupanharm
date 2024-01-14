@@ -5,3 +5,4 @@ Tools used so far in this project :
 - Spring Boot
 - MongoDB
 - Discord4J
+- Jackson + Riot Games public APIs (see https://developer.riotgames.com/)
