@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 
-// TODO check
+// TODO FIX: possibilité de linker plusieurs fois le même compte car pas de sensibilité à la casse mise en place
 @Component
 public class LinkCommand implements SlashCommand {
     private final static Logger logger = LoggerFactory.getLogger(LinkCommand.class);
@@ -30,65 +30,61 @@ public class LinkCommand implements SlashCommand {
         return "link";
     }
 
-    //TODO remplacer les if en cascade par des elseif
     @Override
     public Mono<Void> handle(ChatInputInteractionEvent event) {
         String discordId = event.getInteraction().getUser().getId().asString();
         CaupanharmUser registeredUser = userController.getUser("discordId",discordId);
         String response;
+
+        // CASE /link add
         if(event.getOption("add").isPresent()){
-            String username = getSubcommandValue(event, "add", "username");
-            String tagline = getSubcommandValue(event, "add", "tagline");
-            if(registeredUser == null){
-                if(userController.getUser("riotUsername",username+"#"+tagline) != null){
-                    response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
-                }else{
-                    String riotPuuid = riotAPIController.getUserFromUsername(username, tagline).getPuuid();
-                    if(riotPuuid != null){
-                        userController.insertUser(discordId,riotPuuid,username+"#"+tagline);
-                        response = "Account "+username+"#"+tagline+" is now linked to Caupanharm";
-                    }else{
-                        response = "**Error: **This Riot account does not exist";
-                    }
+            String completeUsername = getRiotCompleteUsernameFromOptions(event, "add");
+            String riotPuuid = riotAPIController.getUserFromUsername(completeUsername).getPuuid();
 
-                }
-            }else{
-                response = "**Error:** You already linked an account to Caupanharm ("+registeredUser.getRiotUsername()+")";
-            }
-
-        } else if (event.getOption("edit").isPresent()) {
-            String username = getSubcommandValue(event, "edit", "username");
-            String tagline = getSubcommandValue(event, "edit", "tagline");
             if(registeredUser != null){
-                CaupanharmUser checkedUser = userController.getUser("riotUsername",username+"#"+tagline);
-
-                if(checkedUser != null){
-                    if(Objects.equals(checkedUser.getDiscordId(), discordId)){
-                        response = "**Error:** You are already linked to this Riot account";
-                    }else{
-                        response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
-                    }
-                }else{
-                    String riotPuuid = riotAPIController.getUserFromUsername(username, tagline).getPuuid();
-                    if(riotPuuid != null){
-                        userController.updateUser("discordId", discordId, "riotUsername", username + "#" + tagline);
-                        userController.updateUser("discordId", discordId, "riotPuuid", riotPuuid);
-                        response = "Your linked account was updated from "+registeredUser.getRiotUsername()+" to "+username+"#"+tagline;
-                    }else{
-                        response = "**Error: **This Riot account does not exist";
-                    }
-                }
+                response = "**Error:** You already linked an account to Caupanharm ("+registeredUser.getRiotUsername()+")";
+            }else if(riotPuuid == null){
+                response = "**Error: **This Riot account does not exist";
+            }else if(userController.getUser("riotUsername",completeUsername) != null){
+                response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
             }else{
-                response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add* instead";
+                userController.insertUser(discordId,riotPuuid,completeUsername);
+                response = "Account "+completeUsername+" is now linked to Caupanharm";
             }
+
+        // CASE /link edit
+        } else if (event.getOption("edit").isPresent()) {
+            String completeUsername = getRiotCompleteUsernameFromOptions(event, "edit");
+            CaupanharmUser checkedUser = userController.getUser("riotUsername",completeUsername);
+
+            if(registeredUser == null){
+                response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add* instead";
+            }else if(checkedUser != null){
+                response = (Objects.equals(checkedUser.getDiscordId(), discordId)) ?
+                        "**Error:** You are already linked to this Riot account" :
+                        "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
+            }else{
+                String riotPuuid = riotAPIController.getUserFromUsername(completeUsername).getPuuid();
+                if(riotPuuid == null){
+                    response = "**Error: **This Riot account does not exist";
+                }else{
+                    userController.updateUser("discordId", discordId, "riotUsername", completeUsername);
+                    userController.updateUser("discordId", discordId, "riotPuuid", riotPuuid);
+                    response = "Your linked account was updated from "+registeredUser.getRiotUsername()+" to "+completeUsername;
+                }
+            }
+
+        // CASE /link remove
         }else if (event.getOption("remove").isPresent()){
-            if(registeredUser != null) {
+            if(registeredUser == null) {
+                response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add*";
+            }else{
                 userController.deleteUser("discordId", event.getInteraction().getUser().getId().asString());
                 response = "Your account ("+registeredUser.getRiotUsername()+") was successfully deleted from Caupanharm";
-            }else{
-                response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add*";
             }
-        }else{// last possible option: "check" (option being a mandatory field, this is safe)
+
+        // CASE /link check
+        }else{
             response = (registeredUser != null) ?
                     "You are currently linked to "+registeredUser.getRiotUsername() :
                     "You didn't link your Riot account to Caupanharm yet\nTry using */link add*";
@@ -105,5 +101,11 @@ public class LinkCommand implements SlashCommand {
                 .flatMap(ApplicationCommandInteractionOption::getValue)
                 .map(ApplicationCommandInteractionOptionValue::asString)
                 .get(); //This is warning us that we didn't check if its present, we can ignore this on required options
+    }
+
+    private String getRiotCompleteUsernameFromOptions(ChatInputInteractionEvent event, String subcommandOption){
+        String username = getSubcommandValue(event, subcommandOption, "username");
+        String tagline = getSubcommandValue(event, subcommandOption, "tagline");
+        return username+"#"+tagline;
     }
 }

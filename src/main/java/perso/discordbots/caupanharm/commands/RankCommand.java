@@ -21,7 +21,7 @@ public class RankCommand implements SlashCommand {
         //We reply to the command with "Pong!" and make sure it is ephemeral (only the command user can see it)
         return event.reply()
                 .withEphemeral(true)
-                .withContent(riotAPIController.getUserFromUsername("Herrahan","EUW").toString());
+                .withContent(riotAPIController.getUserFromUsername("Herrahan#EUW").toString());
     }
 
 }

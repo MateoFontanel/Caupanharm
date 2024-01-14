@@ -39,8 +39,8 @@ public class RiotAPIController {
         return response;
     }
 
-    public RiotAPIUser getUserFromUsername(String username, String tagline){
-        HttpResponse<String> response = makeRequest("https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"+username+"/"+tagline);
+    public RiotAPIUser getUserFromUsername(String completeUsername){
+        HttpResponse<String> response = makeRequest("https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"+completeUsername.replace("#","/")); // So Username#Tagline becomes Username/Tagline
         if (response.statusCode() == 200) {
             try{
                 return new ObjectMapper().readValue(response.body(), RiotAPIUser.class);
