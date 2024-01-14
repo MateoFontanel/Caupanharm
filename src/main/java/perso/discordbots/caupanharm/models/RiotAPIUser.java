@@ -39,6 +39,10 @@ public class RiotAPIUser {
         this.tagLine = tagLine;
     }
 
+    public String getFullName(){
+        return gameName+"#"+tagLine;
+    }
+
     @Override
     public String toString() {
         return "RiotUser{" +
