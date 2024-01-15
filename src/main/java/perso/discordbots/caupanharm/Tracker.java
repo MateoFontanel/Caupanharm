@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated // Code gardé car à réutiliser en partie pour le tracking de rang
 public class Tracker extends Thread{
 
     private String summoner, champion, url;
