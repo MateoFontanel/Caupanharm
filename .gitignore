@@ -15,6 +15,7 @@ HELP.md
 mvnw
 mvnw.cmd
 application.properties
+log4j.properties
 
 # Eclipse m2e generated files
 # Eclipse Core

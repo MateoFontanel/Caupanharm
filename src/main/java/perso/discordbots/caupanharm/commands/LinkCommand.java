@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import perso.discordbots.caupanharm.controllers.RiotAPIController;
 import perso.discordbots.caupanharm.controllers.UserController;
 import perso.discordbots.caupanharm.models.CaupanharmUser;
+import perso.discordbots.caupanharm.models.LeagueAPIUser;
 import perso.discordbots.caupanharm.models.RiotAPIUser;
 import reactor.core.publisher.Mono;
 
@@ -44,13 +45,14 @@ public class LinkCommand implements SlashCommand {
             if (registeredUser != null) {
                 response = "**Error:** You already linked an account to Caupanharm (" + registeredUser.getRiotUsername() + ")";
             } else {
-                RiotAPIUser riotAPIUser = riotAPIController.getUserFromUsername(completeUsername);
+                RiotAPIUser riotAPIUser = riotAPIController.getRiotUser(completeUsername);
                 if (riotAPIUser.getPuuid() == null) {
                     response = "**Error: **This Riot account does not exist";
                 } else if (userController.getUser("riotPuuid", riotAPIUser.getPuuid()) != null) {
                     response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
                 } else {
-                    userController.insertUser(discordId, riotAPIUser.getPuuid(), riotAPIUser.getFullName());
+                    LeagueAPIUser leagueAPIUser = riotAPIController.getLeagueUser(riotAPIUser);
+                    userController.insertUser(discordId, leagueAPIUser.getId(), riotAPIUser.getPuuid(), riotAPIUser.getFullName());
                     response = "Account " + riotAPIUser.getFullName() + " is now linked to Caupanharm";
                 }
             }
@@ -62,19 +64,24 @@ public class LinkCommand implements SlashCommand {
             if (registeredUser == null) {
                 response = "**Error:** You have not linked your Riot account to Caupanharm yet\nTry using */link add* instead";
             } else {
-                RiotAPIUser riotAPIUser = riotAPIController.getUserFromUsername(completeUsername);
-                CaupanharmUser checkedUser = userController.getUser("riotPuuid", riotAPIUser.getPuuid());
-                if (checkedUser != null) {
-                    response = (Objects.equals(checkedUser.getDiscordId(), discordId)) ?
-                            "**Error:** You are already linked to this Riot account" :
-                            "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
-                } else if (riotAPIUser.getPuuid() == null) {
+                RiotAPIUser riotAPIUser = riotAPIController.getRiotUser(completeUsername);
+                if (riotAPIUser == null) {
                     response = "**Error: **This Riot account does not exist";
                 } else {
-                    userController.updateUser("discordId", discordId, "riotUsername", riotAPIUser.getFullName());
-                    userController.updateUser("discordId", discordId, "riotPuuid", riotAPIUser.getPuuid());
-                    response = "Your linked account was updated from " + registeredUser.getRiotUsername() + " to " + riotAPIUser.getFullName();
+                    CaupanharmUser checkedUser = userController.getUser("riotPuuid", riotAPIUser.getPuuid());
+                    if (checkedUser != null) {
+                        response = (Objects.equals(checkedUser.getDiscordId(), discordId)) ?
+                                "**Error:** You are already linked to this Riot account" :
+                                "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
+                    } else {
+                        LeagueAPIUser leagueAPIUser = riotAPIController.getLeagueUser(riotAPIUser);
+                        userController.updateUser("discordId", discordId, "riotUsername", riotAPIUser.getFullName());
+                        userController.updateUser("discordId", discordId, "riotId", leagueAPIUser.getId());
+                        userController.updateUser("discordId", discordId, "riotPuuid", riotAPIUser.getPuuid());
+                        response = "Your linked account was updated from " + registeredUser.getRiotUsername() + " to " + riotAPIUser.getFullName();
+                    }
                 }
+
 
             }
 

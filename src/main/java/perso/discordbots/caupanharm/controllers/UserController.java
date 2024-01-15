@@ -22,11 +22,11 @@ public class UserController extends MongoController{
         super(dbName);
     }
 
-    public void insertUser(String discordID, String riotPuuid, String riotUsername){
+    public void insertUser(String discordId, String riotId, String riotPuuid, String riotUsername){
         super.openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
         try {
-            CaupanharmUser newUser = new CaupanharmUser(discordID,riotPuuid,riotUsername);
+            CaupanharmUser newUser = new CaupanharmUser(discordId,riotId, riotPuuid,riotUsername, false);
             collection.insertOne(newUser);
             logger.info("Created user: "+newUser);
         } catch (MongoException me) {
@@ -79,7 +79,7 @@ public class UserController extends MongoController{
     }
 
 
-    public void updateUser(String oldKey, String oldValue, String newKey, String newValue){
+    public void updateUser(String oldKey, Object oldValue, String newKey, Object newValue){
         openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
         Bson updateFilter = Updates.set(newKey, newValue);
