@@ -1,0 +1,26 @@
+{
+  "name": "config",
+  "description": "admins only",
+  "options": [
+    {
+      "name": "setgame",
+      "description": "Set current channel's game",
+      "type": 3,
+      "required": true,
+      "choices": [
+        {
+          "name": "League Of Legends",
+          "value": "LOL"
+        },
+        {
+          "name": "VALORANT",
+          "value": "VAL"
+        },
+        {
+          "name": "None",
+          "value": "NULL"
+        }
+      ]
+    }
+  ]
+}
