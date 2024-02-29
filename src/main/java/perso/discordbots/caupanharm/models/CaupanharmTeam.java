@@ -1,14 +1,26 @@
 package perso.discordbots.caupanharm.models;
 
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.discordjson.json.EmojiData;
+import discord4j.rest.entity.RestEmoji;
+import discord4j.rest.util.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import perso.discordbots.caupanharm.commands.Val.TeamCommand;
+import perso.discordbots.caupanharm.controllers.EmojiController;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CaupanharmTeam {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private String name;
     private List<String> members = new ArrayList<>();
     private List<String> tier2members = new ArrayList<>(), tier1members = new ArrayList<>();
 
-    public CaupanharmTeam(String name, String discordId){
+    public CaupanharmTeam(String name, String discordId) {
         this.name = name;
         members.add(discordId); // Tier 2 member AKA creator, all joining members will be tier 0, members can be promoted to tier 1 for more management options
         tier2members.add(discordId);
@@ -31,15 +43,23 @@ public class CaupanharmTeam {
                 '}';
     }
 
-    public String toDiscord(){
-        StringBuilder output = new StringBuilder(String.format("Team **%s**", getName())
-                + "\n\n__Members:__ \n")
-                ;
-        for(String id : members){
-            output.append("<@").append(id).append(">\n");
-        }
+    public EmbedCreateSpec fetchAndFormatTeamEmbed() {
+        EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
+                .color(Color.YELLOW)
+                .title("Team **Osiris**")
+                .description("__Membres:__");
 
-        return output.toString().trim();
+        String unrankedIconName = "OSRUnranked";
+        String unrankedIconId = EmojiController.getEmojiByName(unrankedIconName);
+
+
+        String temp = "";
+        for(String id : members){
+            temp += String.format("<:%s:%s> <@%s>\n", unrankedIconName, unrankedIconId, id);
+        }
+        embedBuilder.addField("\u200b", temp, false);
+
+        return embedBuilder.build();
     }
 
     public String getName() {
@@ -74,34 +94,34 @@ public class CaupanharmTeam {
         this.tier1members = tier1members;
     }
 
-    public void addMember(String discordUserId){
+    public void addMember(String discordUserId) {
         members.add(discordUserId);
     }
 
-    public void removeMember(String discordUserId){
+    public void removeMember(String discordUserId) {
         members.remove(discordUserId);
         tier1members.remove(discordUserId);
         tier2members.remove(discordUserId);
     }
 
     /**
-     *
      * Check if user 1 (first param) has a higher tier in the team than user 2 (second param)
+     *
      * @param id1 user 1 discord id
      * @param id2 user 2 discord id
      * @return true if user 1 has hierarchical superiority to user 2, false if not
      */
-    public boolean hasSuperiority(String id1, String id2){
+    public boolean hasSuperiority(String id1, String id2) {
         int tier1 = 0, tier2 = 0;
-        if(tier2members.contains(id1)){
+        if (tier2members.contains(id1)) {
             tier1 = 2;
-        }else if(tier1members.contains(id1)){
+        } else if (tier1members.contains(id1)) {
             tier1 = 1;
         }
 
-        if(tier2members.contains(id2)){
+        if (tier2members.contains(id2)) {
             tier2 = 2;
-        }else if(tier1members.contains(id2)){
+        } else if (tier1members.contains(id2)) {
             tier2 = 1;
         }
 
@@ -110,10 +130,11 @@ public class CaupanharmTeam {
 
     /**
      * Check if user is the team captain (tier 2 as of now, can be modified)
+     *
      * @param discordId
      * @return yes if so
      */
-    public boolean isHigherTier(String discordId){
+    public boolean isHigherTier(String discordId) {
         return tier2members.contains(discordId);
     }
 }

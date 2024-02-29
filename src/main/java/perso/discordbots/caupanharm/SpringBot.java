@@ -13,10 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
-import perso.discordbots.caupanharm.controllers.ChannelController;
-import perso.discordbots.caupanharm.controllers.RiotAPIController;
-import perso.discordbots.caupanharm.controllers.TeamController;
-import perso.discordbots.caupanharm.controllers.UserController;
+import perso.discordbots.caupanharm.controllers.*;
 import perso.discordbots.caupanharm.threads.GameTracker;
 import perso.discordbots.caupanharm.threads.TrackerDeprecated;
 
@@ -31,6 +28,9 @@ public class SpringBot {
 
     @Value("${discord_bot_token}")
     String discord_bot_token;
+
+    @Value("${emojis_guild_id}")
+    String emojis_guild_id;
 
 
     public static void main(String[] args) {
@@ -78,6 +78,11 @@ public class SpringBot {
     @Bean
     public TeamController teamController(){
         return new TeamController("Caupanharm_db");
+    }
+
+    @Bean
+    public EmojiController emojiController(){
+        return new EmojiController(emojis_guild_id);
     }
 
     @Bean

@@ -4,7 +4,6 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandInteractionOption;
 import discord4j.core.object.command.ApplicationCommandInteractionOptionValue;
 import discord4j.core.object.entity.User;
-import discord4j.rest.util.AllowedMentions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +151,7 @@ public class TeamCommand implements SlashCommand {
                     return ResponseBuilder.build(event, "You are not currently in a team", false, true);
 
                 CaupanharmTeam team = teamController.getTeamByName(user.getTeam());
-                return ResponseBuilder.build(event, team.toDiscord(), false, false);
+                return ResponseBuilder.buildEmbed(event, team.fetchAndFormatTeamEmbed(), false);
         }
         return ResponseBuilder.build(event, "Internal server error", true, false);
     }
