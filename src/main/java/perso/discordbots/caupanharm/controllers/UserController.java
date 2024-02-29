@@ -7,28 +7,33 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.mongodb.client.model.Filters.eq;
+
 import perso.discordbots.caupanharm.models.CaupanharmUser;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class UserController extends MongoController{
+public class UserController extends MongoController {
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    public UserController(String dbName){
+    public UserController(String dbName) {
         super(dbName);
     }
 
-    public void insertUser(String discordId, String riotId, String riotPuuid, String riotUsername){
+    public void insertUser(String discordId, String riotId, String riotPuuid, String riotUsername) {
         super.openClient(settings, dbName);
-        MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         try {
-            CaupanharmUser newUser = new CaupanharmUser(discordId,riotId, riotPuuid,riotUsername, false);
+            CaupanharmUser newUser = new CaupanharmUser(discordId, riotId, riotPuuid, riotUsername, false);
             collection.insertOne(newUser);
-            logger.info("Created user: "+newUser);
+            logger.info("Created user: " + newUser);
         } catch (MongoException me) {
             logger.error("Unable to insert any data into MongoDB due to an error: " + me);
         }
@@ -50,48 +55,51 @@ public class UserController extends MongoController{
 
      */
 
-    public void getUsers(){
+    public List<CaupanharmUser> getUsers(String key, Object value) {
         openClient(settings, dbName);
-        MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
-        try(MongoCursor<CaupanharmUser> cursor = collection.find().iterator()){
-            while(cursor.hasNext()){
-                CaupanharmUser currentUser = cursor.next();
-                logger.info(currentUser.toString());
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
+        Bson filter = Filters.eq(key, value);
+        List<CaupanharmUser> result = new ArrayList<>();
+        try {
+            if (collection.countDocuments(filter) == 0) return result;
+            for (CaupanharmUser currentUser : collection.find()) {
+                result.add(currentUser);
             }
-        }catch(MongoException me){
-            logger.error("Unable to find the list of users due to an error: "+me);
+        } catch (MongoException me) {
+            logger.error("Unable to find the list of users due to an error: " + me);
         }
         mongoClient.close();
+        return result;
     }
 
-    public CaupanharmUser getUser(String key, String value){
+    public CaupanharmUser getUser(String key, String value) {
         openClient(settings, dbName);
-        MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         Bson filter = Filters.eq(key, value);
         CaupanharmUser result = null;
-        try{
+        try {
             result = collection.find(filter).first();
-        }catch(MongoException me){
-            logger.error("Unable to find any user due to an error: "+me);
+        } catch (MongoException me) {
+            logger.error("Unable to find any user due to an error: " + me);
         }
         mongoClient.close();
         return result;
     }
 
 
-    public void updateUser(String oldKey, Object oldValue, String newKey, Object newValue){
+    public void updateUser(String keyFilter, Object valueFilter, String keyToEdit, Object newValue) {
         openClient(settings, dbName);
-        MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
-        Bson updateFilter = Updates.set(newKey, newValue);
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
+        Bson updateFilter = Updates.set(keyToEdit, newValue);
         // The following FindOneAndUpdateOptions specify that we want it to return
         // the *updated* document to us. By default, we get the document as it was *before*
         // the update.
         FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
         // The updatedDocument object is an object that reflects the changes we just made.
         try {
-            CaupanharmUser updatedUser = collection.findOneAndUpdate(Filters.eq(oldKey, oldValue), updateFilter, options);
+            CaupanharmUser updatedUser = collection.findOneAndUpdate(Filters.eq(keyFilter, valueFilter), updateFilter, options);
             if (updatedUser == null) {
-                logger.warn("Couldn't update the document. Did someone (or something) delete it?");
+                logger.error("Couldn't update the document. Did someone (or something) delete it?");
             } else {
                 logger.info("Updated user: " + updatedUser);
             }
@@ -101,16 +109,32 @@ public class UserController extends MongoController{
         mongoClient.close();
     }
 
-    public void deleteUser(String key, String value){
+    public void updateUsers(String keyFilter, Object valueFilter, String keyToEdit, Object newValue) {
         openClient(settings, dbName);
-        MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
+        Bson query = eq(keyFilter,valueFilter);
+        Bson updateFilter = Updates.set(keyToEdit, newValue);
+
+        try {
+            UpdateResult result = collection.updateMany(query, updateFilter);
+            logger.info("Modified document count: "+result.getModifiedCount());
+        } catch (MongoException me) {
+            logger.error("Unable to update any document due to an error: " + me);
+        }
+        mongoClient.close();
+    }
+
+    public void deleteUser(String key, String value) {
+        openClient(settings, dbName);
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         Bson deleteFilter = Filters.eq(key, value);
         try {
             CaupanharmUser deletedUser = collection.findOneAndDelete(deleteFilter);
-            logger.info("Deleted user: "+deletedUser);
+            logger.info("Deleted user: " + deletedUser);
         } catch (MongoException me) {
             logger.error("Unable to delete a document due to an error: " + me);
         }
         mongoClient.close();
     }
+
 }
