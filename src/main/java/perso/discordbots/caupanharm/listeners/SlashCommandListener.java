@@ -7,6 +7,7 @@ import perso.discordbots.caupanharm.commands.SlashCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,6 +31,12 @@ public class SlashCommandListener {
                 //Get the first (and only) item in the flux that matches our filter
                 .next()
                 //Have our command class handle all logic related to its specific command.
-                .flatMap(command -> command.handle(event));
+                .flatMap(command -> {
+                    try {
+                        return command.handle(event);
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 }

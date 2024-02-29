@@ -1,0 +1,22 @@
+{
+  "name": "lol_track",
+  "description": "Set your ingame tracking",
+  "options": [
+    {
+      "name": "set",
+      "description": "Turn the tracker on or off for your linked Riot account",
+      "type": 3,
+      "required": true,
+      "choices": [
+        {
+          "name": "on",
+          "value": "true"
+        },
+        {
+          "name": "off",
+          "value": "false"
+        }
+      ]
+    }
+  ]
+}

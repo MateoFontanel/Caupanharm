@@ -10,13 +10,7 @@
           "options": [
             {
               "name": "username",
-              "description": "Riot Username (what comes before '#')",
-              "type": 3,
-              "required": true
-            },
-            {
-              "name": "tagline",
-              "description": "Riot Tagline (what comes after '#')",
+              "description": "Full Username (name#tag)",
               "type": 3,
               "required": true
             }
@@ -30,13 +24,7 @@
           "options": [
             {
               "name": "username",
-              "description": "Riot Username (what comes before '#')",
-              "type": 3,
-              "required": true
-            },
-            {
-              "name": "tagline",
-              "description": "Username Tagline (what comes after '#')",
+              "description": "Full Username (name#tag)",
               "type": 3,
               "required": true
             }

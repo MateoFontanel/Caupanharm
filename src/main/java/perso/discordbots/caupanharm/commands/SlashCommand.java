@@ -3,6 +3,8 @@ package perso.discordbots.caupanharm.commands;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * A simple interface defining our slash command class contract.
  *  a getName() method to provide the case-sensitive name of the command.
@@ -12,5 +14,5 @@ public interface SlashCommand {
 
     String getName();
 
-    Mono<Void> handle(ChatInputInteractionEvent event);
+    Mono<Void> handle(ChatInputInteractionEvent event) throws UnsupportedEncodingException;
 }

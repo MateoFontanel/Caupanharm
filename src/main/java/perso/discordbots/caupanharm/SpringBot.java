@@ -13,40 +13,52 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
+import perso.discordbots.caupanharm.controllers.ChannelController;
 import perso.discordbots.caupanharm.controllers.RiotAPIController;
+import perso.discordbots.caupanharm.controllers.TeamController;
 import perso.discordbots.caupanharm.controllers.UserController;
+import perso.discordbots.caupanharm.threads.GameTracker;
+import perso.discordbots.caupanharm.threads.TrackerDeprecated;
+
+import java.io.IOException;
 
 
 @SpringBootApplication(scanBasePackages = "perso.discordbots.caupanharm")
 @EnableAutoConfiguration(exclude = {MongoAutoConfiguration.class})
 public class SpringBot {
-    private static Tracker tracker;
+    private static TrackerDeprecated trackerDeprecated;
     private final static Logger logger = LoggerFactory.getLogger(SpringBot.class);
+
     @Value("${discord_bot_token}")
     String discord_bot_token;
+
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(SpringBot.class)
                 .build()
                 .run(args);
-
     }
 
     public static void setTracker(String summoner, String champion) {
-        tracker.interrupt();
-        tracker = new Tracker(summoner, champion);
-        tracker.start();
+        trackerDeprecated.interrupt();
+        trackerDeprecated = new TrackerDeprecated(summoner, champion);
+        trackerDeprecated.start();
     }
 
-    public static void setTracker(Tracker newTracker) {
-        tracker = newTracker;
-        tracker.start();
+    public static void setTracker(TrackerDeprecated newTrackerDeprecated) {
+        trackerDeprecated = newTrackerDeprecated;
+        trackerDeprecated.start();
     }
 
-    public static Tracker getTracker() {
-        return tracker;
+    public static TrackerDeprecated getTracker() {
+        return trackerDeprecated;
     }
 
+
+    /*
+    @Bean
+    public GameTracker gameTracker(){ return new GameTracker();}
+     */
 
     @Bean
     public RiotAPIController riotAPIController(){
@@ -55,9 +67,18 @@ public class SpringBot {
 
     @Bean
     public UserController userController() {
-        return new UserController("caupanharm_db");
+        return new UserController("Caupanharm_db");
     }
 
+    @Bean
+    public ChannelController channelController() throws IOException {
+        return new ChannelController();
+    }
+
+    @Bean
+    public TeamController teamController(){
+        return new TeamController("Caupanharm_db");
+    }
 
     @Bean
     public GatewayDiscordClient gatewayDiscordClient() {

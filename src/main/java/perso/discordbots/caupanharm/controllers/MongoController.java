@@ -44,7 +44,7 @@ public class MongoController {
 
     @PostConstruct
     void init() {
-        connectionString = new ConnectionString("mongodb+srv://" + mongodb_admin_usr + ":" + mongodb_admin_pwd + "@cluster0.ttjwtey.mongodb.net/?retryWrites=true&w=majority");
+        connectionString = new ConnectionString("mongodb+srv://" + mongodb_admin_usr + ":" + mongodb_admin_pwd + "@caupanharmcluster.2lh0nde.mongodb.net/?retryWrites=true&w=majority");
 
         // a CodecRegistry tells the Driver how to move data between Java POJOs (Plain Old Java Objects) and MongoDB documents
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
