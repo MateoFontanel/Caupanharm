@@ -38,7 +38,7 @@ public class LinkCommand implements SlashCommand {
     }
 
     @Override
-    public Mono<Void> handle(ChatInputInteractionEvent event) throws UnsupportedEncodingException {
+    public Mono<Void> handle(ChatInputInteractionEvent event) {
         String discordId = event.getInteraction().getUser().getId().asString();
         CaupanharmUser registeredUser = userController.getUser("discordId", discordId);
         String response;
@@ -54,7 +54,12 @@ public class LinkCommand implements SlashCommand {
                 if (!(completeUsername.contains("#")))
                     return ResponseBuilder.build(event, "**Error:** Invalid username", true, false);
 
-                RiotAPIUser riotAPIUser = riotAPIController.getRiotUser(completeUsername);
+                RiotAPIUser riotAPIUser = null;
+                try {
+                    riotAPIUser = riotAPIController.getRiotUser(completeUsername);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
                 if (riotAPIUser == null) {
                     response = "**Error: **This Riot account does not exist";
                 } else if (userController.getUser("riotPuuid", riotAPIUser.getPuuid()) != null) {
@@ -76,7 +81,11 @@ public class LinkCommand implements SlashCommand {
                 if (registeredUser == null) {
                     response = "**Error:** You have not linked your Riot account to Caupanharm yet\nTry using */link add* instead";
                 } else {
-                    riotAPIUser = riotAPIController.getRiotUser(completeUsername);
+                    try {
+                        riotAPIUser = riotAPIController.getRiotUser(completeUsername);
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
                     if (riotAPIUser == null) {
                         response = "**Error: **This Riot account does not exist";
                     } else {

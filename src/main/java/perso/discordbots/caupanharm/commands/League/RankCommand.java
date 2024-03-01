@@ -21,11 +21,15 @@ public class RankCommand implements SlashCommand {
     RiotAPIController riotAPIController;
 
     @Override
-    public Mono<Void> handle(ChatInputInteractionEvent event) throws UnsupportedEncodingException {
+    public Mono<Void> handle(ChatInputInteractionEvent event) {
         //We reply to the command with "Pong!" and make sure it is ephemeral (only the command user can see it)
-        return event.reply()
-                .withEphemeral(true)
-                .withContent(riotAPIController.getRiotUser("Herrahan#EUW").toString());
+        try {
+            return event.reply()
+                    .withEphemeral(true)
+                    .withContent(riotAPIController.getRiotUser("Herrahan#EUW").toString());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

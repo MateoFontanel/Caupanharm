@@ -31,7 +31,7 @@ public class ConfigCommand implements SlashCommand {
     }
 
     @Override
-    public Mono<Void> handle(ChatInputInteractionEvent event) throws UnsupportedEncodingException {
+    public Mono<Void> handle(ChatInputInteractionEvent event) {
         String response = " ";
 
         if (!authorized_ids.contains(event.getInteraction().getUser().getId().asString())) {
