@@ -1,5 +1,6 @@
 {
   "name": "team",
+  "type": 1,
   "description": "Manage teams",
   "options": [
     {

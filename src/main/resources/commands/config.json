@@ -1,5 +1,6 @@
 {
   "name": "config",
+  "type": 1,
   "description": "admins only",
   "options": [
     {

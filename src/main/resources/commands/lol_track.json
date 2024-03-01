@@ -1,5 +1,6 @@
 {
   "name": "lol_track",
+  "type": 1,
   "description": "Set your ingame tracking",
   "options": [
     {

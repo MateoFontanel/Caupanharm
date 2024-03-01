@@ -1,5 +1,6 @@
 {
   "name": "greet",
+  "type": 1,
   "description": "Greets you",
   "options": [
     {
