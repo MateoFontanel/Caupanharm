@@ -14,10 +14,10 @@ import java.util.List;
 @Component
 public class SlashCommandListener {
 
-    private final Collection<SlashCommand> commands;
+    private final Collection<SlashCommand> slashCommands;
 
     public SlashCommandListener(List<SlashCommand> slashCommands, GatewayDiscordClient client) {
-        commands = slashCommands;
+        this.slashCommands = slashCommands;
 
         client.on(ChatInputInteractionEvent.class, this::handle).subscribe();
     }
@@ -25,18 +25,12 @@ public class SlashCommandListener {
 
     public Mono<Void> handle(ChatInputInteractionEvent event) {
         //Convert our list to a flux that we can iterate through
-        return Flux.fromIterable(commands)
+        return Flux.fromIterable(slashCommands)
                 //Filter out all commands that don't match the name this event is for
                 .filter(command -> command.getName().equals(event.getCommandName()))
                 //Get the first (and only) item in the flux that matches our filter
                 .next()
                 //Have our command class handle all logic related to its specific command.
-                .flatMap(command -> {
-                    try {
-                        return command.handle(event);
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                .flatMap(command -> command.handle(event));
     }
 }
