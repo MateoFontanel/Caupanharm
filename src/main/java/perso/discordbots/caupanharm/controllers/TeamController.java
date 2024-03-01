@@ -15,14 +15,11 @@ import perso.discordbots.caupanharm.models.CaupanharmTeam;
 public class TeamController extends MongoController{
     private final static Logger logger = LoggerFactory.getLogger(TeamController.class);
 
-    String dbName;
-
-    public TeamController(String dbName){
-        this.dbName = dbName;
+    public TeamController(){
+        super();
     }
 
     public void insertTeam(CaupanharmTeam team){
-        super.openClient(settings, dbName);
         MongoCollection<CaupanharmTeam> collection = database.getCollection("teams",CaupanharmTeam.class);
         try {
             collection.insertOne(team);
@@ -30,11 +27,9 @@ public class TeamController extends MongoController{
         } catch (MongoException me) {
             logger.error("Unable to insert any data into MongoDB due to an error: " + me);
         }
-        mongoClient.close();
     }
 
     public CaupanharmTeam getTeamByName(String requestedTeam){
-        openClient(settings, dbName);
         MongoCollection<CaupanharmTeam> collection = database.getCollection("teams",CaupanharmTeam.class);
         Bson filter = Filters.eq("name", requestedTeam);
         CaupanharmTeam result = null;
@@ -43,12 +38,10 @@ public class TeamController extends MongoController{
         }catch(MongoException me){
             logger.error("Unable to find any team due to an error: "+me);
         }
-        mongoClient.close();
         return result;
     }
 
     public void updateTeam(String keyFilter, Object valueFilter, String keyToEdit, Object newValue){
-        openClient(settings, dbName);
         MongoCollection<CaupanharmTeam> collection = database.getCollection("teams",CaupanharmTeam.class);
         Bson updateFilter = Updates.set(keyToEdit, newValue);
         // The following FindOneAndUpdateOptions specify that we want it to return
@@ -67,11 +60,9 @@ public class TeamController extends MongoController{
         } catch (MongoException me) {
             logger.error("Unable to update any document due to an error: " + me);
         }
-        mongoClient.close();
     }
 
     public void replaceTeam(String name, CaupanharmTeam replacement){
-        openClient(settings, dbName);
         MongoCollection<CaupanharmTeam> collection = database.getCollection("teams",CaupanharmTeam.class);
         Bson query = Filters.eq("name",name);
         UpdateResult result = collection.replaceOne(query, replacement);
@@ -79,7 +70,6 @@ public class TeamController extends MongoController{
     }
 
     public void deleteTeam(String key, String value){
-        openClient(settings, dbName);
         try {
             MongoCollection<CaupanharmTeam> collection = database.getCollection("teams",CaupanharmTeam.class);
             Bson deleteFilter = Filters.eq(key, value);
@@ -88,7 +78,6 @@ public class TeamController extends MongoController{
         } catch (MongoException me) {
             logger.error("Unable to delete a document due to an error: " + me);
         }
-        mongoClient.close();
     }
 
 }

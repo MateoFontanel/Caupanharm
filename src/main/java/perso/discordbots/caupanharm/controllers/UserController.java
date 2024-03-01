@@ -2,7 +2,6 @@ package perso.discordbots.caupanharm.controllers;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
@@ -24,11 +23,10 @@ public class UserController extends MongoController {
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public UserController(String dbName) {
-        super(dbName);
+        super();
     }
 
     public void insertUser(String discordId, String riotId, String riotPuuid, String riotUsername) {
-        super.openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         try {
             CaupanharmUser newUser = new CaupanharmUser(discordId, riotId, riotPuuid, riotUsername, false);
@@ -37,7 +35,6 @@ public class UserController extends MongoController {
         } catch (MongoException me) {
             logger.error("Unable to insert any data into MongoDB due to an error: " + me);
         }
-        mongoClient.close();
     }
 
     /*
@@ -56,7 +53,6 @@ public class UserController extends MongoController {
      */
 
     public List<CaupanharmUser> getUsers(String key, Object value) {
-        openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         Bson filter = Filters.eq(key, value);
         List<CaupanharmUser> result = new ArrayList<>();
@@ -68,12 +64,10 @@ public class UserController extends MongoController {
         } catch (MongoException me) {
             logger.error("Unable to find the list of users due to an error: " + me);
         }
-        mongoClient.close();
         return result;
     }
 
     public CaupanharmUser getUser(String key, String value) {
-        openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         Bson filter = Filters.eq(key, value);
         CaupanharmUser result = null;
@@ -82,13 +76,11 @@ public class UserController extends MongoController {
         } catch (MongoException me) {
             logger.error("Unable to find any user due to an error: " + me);
         }
-        mongoClient.close();
         return result;
     }
 
 
     public void updateUser(String keyFilter, Object valueFilter, String keyToEdit, Object newValue) {
-        openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         Bson updateFilter = Updates.set(keyToEdit, newValue);
         // The following FindOneAndUpdateOptions specify that we want it to return
@@ -106,11 +98,9 @@ public class UserController extends MongoController {
         } catch (MongoException me) {
             logger.error("Unable to update any document due to an error: " + me);
         }
-        mongoClient.close();
     }
 
     public void updateUsers(String keyFilter, Object valueFilter, String keyToEdit, Object newValue) {
-        openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         Bson query = eq(keyFilter,valueFilter);
         Bson updateFilter = Updates.set(keyToEdit, newValue);
@@ -121,11 +111,9 @@ public class UserController extends MongoController {
         } catch (MongoException me) {
             logger.error("Unable to update any document due to an error: " + me);
         }
-        mongoClient.close();
     }
 
     public void deleteUser(String key, String value) {
-        openClient(settings, dbName);
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         Bson deleteFilter = Filters.eq(key, value);
         try {
@@ -134,7 +122,6 @@ public class UserController extends MongoController {
         } catch (MongoException me) {
             logger.error("Unable to delete a document due to an error: " + me);
         }
-        mongoClient.close();
     }
 
 }

@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import perso.discordbots.caupanharm.controllers.*;
-import perso.discordbots.caupanharm.threads.GameTracker;
 import perso.discordbots.caupanharm.threads.TrackerDeprecated;
 
 import java.io.IOException;
@@ -77,7 +76,7 @@ public class SpringBot {
 
     @Bean
     public TeamController teamController(){
-        return new TeamController("Caupanharm_db");
+        return new TeamController();
     }
 
     @Bean

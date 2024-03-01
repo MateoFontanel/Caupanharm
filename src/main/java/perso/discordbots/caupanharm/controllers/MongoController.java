@@ -21,14 +21,10 @@ public class MongoController {
 
     MongoClientSettings settings;
     ConnectionString connectionString;
-    String dbName;
     MongoDatabase database;
     MongoClient mongoClient;
 
     public MongoController() {
-        connectionString = null;
-        settings = null;
-        dbName = null;
     }
 
     @Value("${mongodb_admin_usr}")
@@ -37,9 +33,8 @@ public class MongoController {
     @Value("${mongodb_admin_pwd}")
     String mongodb_admin_pwd;
 
-    public MongoController(String dbName) {
-        this.dbName = dbName;
-    }
+    @Value("${mongodb_db_name}")
+    String mongodb_db_name;
 
 
     @PostConstruct
@@ -55,6 +50,7 @@ public class MongoController {
         settings = MongoClientSettings.builder()
                 .codecRegistry(pojoCodecRegistry)
                 .applyConnectionString(connectionString).build();
+        openClient(settings, mongodb_db_name);
     }
 
     void openClient(MongoClientSettings settings, String dbName) {
