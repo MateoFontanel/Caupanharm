@@ -43,16 +43,16 @@ public class GlobalCommandRegistrar implements ApplicationRunner {
         for (Resource resource : matcher.getResources("commands/*.json")) {
             ApplicationCommandRequest request = d4jMapper.getObjectMapper()
                     .readValue(resource.getInputStream(), ApplicationCommandRequest.class);
-
             commands.add(request);
         }
-
         /* Bulk overwrite commands. This is now idempotent, so it is safe to use this even when only 1 command
         is changed/added/removed
         */
         applicationService.bulkOverwriteGlobalApplicationCommand(applicationId, commands)
-                .doOnNext(ignore -> LOGGER.debug("Successfully registered Global Commands"))
+                .doOnNext(command -> LOGGER.info("Successfully registered global command" + command.name()))
                 .doOnError(e -> LOGGER.error("Failed to register global commands", e))
                 .subscribe();
+
+
     }
 }

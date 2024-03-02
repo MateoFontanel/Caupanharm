@@ -6,9 +6,8 @@ import discord4j.core.object.command.ApplicationCommandInteractionOptionValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import perso.discordbots.caupanharm.ResponseBuilder;
+import perso.discordbots.caupanharm.util.ResponseBuilder;
 import perso.discordbots.caupanharm.commands.SlashCommand;
 import perso.discordbots.caupanharm.controllers.RiotAPIController;
 import perso.discordbots.caupanharm.controllers.UserController;
@@ -18,7 +17,6 @@ import perso.discordbots.caupanharm.models.RiotAPIUser;
 import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 // TODO clear MongoDB logs
@@ -49,10 +47,10 @@ public class LinkCommand implements SlashCommand {
                 String completeUsername = getSubcommandValue(event, "add", "username");
 
                 if (registeredUser != null)
-                    return ResponseBuilder.build(event, "**Error:** You already linked an account to Caupanharm (" + registeredUser.getRiotUsername() + ")", true, false);
+                    return ResponseBuilder.build(event, "**Error:** You already linked an account to Caupanharm (" + registeredUser.getRiotUsername() + ")", null, true, false);
 
                 if (!(completeUsername.contains("#")))
-                    return ResponseBuilder.build(event, "**Error:** Invalid username", true, false);
+                    return ResponseBuilder.build(event, "**Error:** Invalid username", null,true, false);
 
                 RiotAPIUser riotAPIUser = null;
                 try {
