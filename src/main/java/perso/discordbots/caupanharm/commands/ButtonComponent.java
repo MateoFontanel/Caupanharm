@@ -16,5 +16,5 @@ public interface ButtonComponent extends Component<ButtonInteractionEvent> {
         return Component.super.requiredPermissions();
     }
 
-    Mono<Message> handle(ButtonInteractionEvent event);
+    Mono<Void> handle(ButtonInteractionEvent event);
 }

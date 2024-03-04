@@ -13,5 +13,5 @@ public interface Component<T extends ComponentInteractionEvent> {
     default PermissionSet requiredPermissions() {
         return PermissionSet.none();
     }
-    Mono<Message> handle(T event);
+    Mono<Void> handle(T event);
 }
