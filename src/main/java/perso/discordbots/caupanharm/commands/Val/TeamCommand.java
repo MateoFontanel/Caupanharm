@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import perso.discordbots.caupanharm.controllers.EmojiController;
+import perso.discordbots.caupanharm.models.ValRanks;
 import perso.discordbots.caupanharm.models.ValRoles;
 import perso.discordbots.caupanharm.models.api.HenrikUser;
 import perso.discordbots.caupanharm.util.ResponseBuilder;
@@ -183,30 +184,33 @@ public class TeamCommand implements SlashCommand {
     }
 
     public EmbedCreateSpec fetchAndFormatTeamEmbed(CaupanharmTeam team) {
-
-
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
                 .color(Color.YELLOW)
                 .title(String.format("Team **%s**", team.getName()));
 
         StringBuilder col1 = new StringBuilder();
-        StringBuilder col2 = new StringBuilder();
-        StringBuilder col3 = new StringBuilder();
+        StringBuilder col2 = new StringBuilder("\u200b    \u200b    \u200b    \u200b    \u200b    "); // \u200b is an empty whitespace, and 4 regular spaces is an indent in Discord. I use this to make it possible to align text as I wish
+        StringBuilder col3 = new StringBuilder("\u200b    \u200b    \u200b    ");
         Iterator<CaupanharmUser> it_users = userController.getUsersFromDiscordId(team.getMembers()).listIterator();
         while (it_users.hasNext()) {
             CaupanharmUser member = it_users.next();
-            logger.info(apiController.getHenrikUser(member.getRiotUsername(), true).toString());
-
+            String member_rank = apiController.getValorantRank(member.getHenrikPuuid());
 
             col1.append(String.format("<@%s>", member.getDiscordId()));
 
-            if(member.getRoles().size() == 0){
+            for (ValRanks rank : ValRanks.values()) {
+                if (rank.getFormattedName().equals(member_rank))
+                    col2.append(emojiController.formatEmoji(rank.getName()));
+            }
+
+
+            if (member.getRoles().size() == 0) {
                 col3.append("\u200b"); // Discord doesn't allow empty strings so this is a way to bypass that
-            }else{
+            } else {
                 Iterator<ValRoles> it_roles = member.getRoles().listIterator();
                 while (it_roles.hasNext()) {
                     ValRoles role = it_roles.next();
-                    col3.append(emojiController.formatEmoji(role.getEmojiName()));
+                    col3.append(emojiController.formatEmoji(role.getName()));
                     if (it_roles.hasNext()) col3.append(" ");
                 }
             }
@@ -214,14 +218,14 @@ public class TeamCommand implements SlashCommand {
 
             if (it_users.hasNext()) {
                 col1.append("\n");
-                col2.append("\n");
-                col3.append("\n");
+                col2.append("\n\u200b    \u200b    \u200b    \u200b    \u200b    ");
+                col3.append("\n\u200b    \u200b    \u200b    ");
             }
         }
 
-        embedBuilder.addField("__Membre__", col1.toString(), true);
-        embedBuilder.addField("__Rang__", col2.toString(), true);
-        embedBuilder.addField("__Rôles__", col3.toString(), true);
+        embedBuilder.addField("\u200b __Membre__", col1.toString(), true);
+        embedBuilder.addField("\u200b   __Rang__", col2.toString(), true);
+        embedBuilder.addField("\u200b   __Rôles__", col3.toString(), true);
 
         return embedBuilder.build();
     }

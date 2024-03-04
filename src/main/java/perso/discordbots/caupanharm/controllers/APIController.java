@@ -22,6 +22,9 @@ public class APIController {
     @Value("${henrik_api_key}")
     String henrik_api_key;
 
+    @Value("${val_current_season}")
+    String current_season;
+
     public APIController() {
     }
 
@@ -48,12 +51,11 @@ public class APIController {
         String uri = String.format("https://api.henrikdev.xyz/valorant/v1/account/%s/%s?force=%b", username.replace(" ","%20"), tagline, updateFirst);
 
         HttpResponse<String> response = RequestBuilder.get(Apis.HENRIKDEV, uri, henrik_api_key);
-        HenrikUser henrikUser = null;
         switch(response.statusCode()){
             case 200:
                 try{
                     HenrikApiResponse data = new ObjectMapper().readValue(response.body(), HenrikApiResponse.class);
-                    henrikUser = data.buildHenrikUser();
+                    return data.buildHenrikUser();
                 }catch(JsonProcessingException e){
                     logger.error(String.valueOf(e));
                 }
@@ -65,7 +67,29 @@ public class APIController {
                 break;
         }
 
-        return henrikUser;
+        return null;
+    }
+
+    public String getValorantRank(String puuid){
+        String uri = String.format("https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/eu/%s", puuid);
+        HttpResponse<String> response = RequestBuilder.get(Apis.HENRIKDEV, uri, henrik_api_key);
+        switch(response.statusCode()){
+            case 200:
+                try{
+                    HenrikApiResponse data = new ObjectMapper().readValue(response.body(), HenrikApiResponse.class);
+                    return data.getMmr(current_season);
+                }catch(JsonProcessingException e){
+                    logger.error(String.valueOf(e));
+                }
+                break;
+
+            default:
+                logger.error(String.valueOf(response.statusCode()));
+                logger.error(response.body());
+                break;
+        }
+
+        return null;
     }
 
     public RiotLeagueUser getLeagueUser(RiotUser riotUser){

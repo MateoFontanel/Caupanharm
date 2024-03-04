@@ -57,7 +57,7 @@ public class RolesCommand implements ButtonComponent {
             Iterator<ValRoles> it = userRoles.listIterator();
             while (it.hasNext()) {
                 ValRoles role = it.next();
-                response.append(emojiController.formatEmojiWith1Value("<:%s:%s> %s", role.getEmojiName(), role.getFormattedName()));
+                response.append(emojiController.formatEmojiWith1Value("<:%s:%s> %s", role.getName(), role.getFormattedName()));
                 if (it.hasNext()) response.append(", ");
             }
             return ResponseBuilder.buildReply(event, response.toString(), null, true, false);
