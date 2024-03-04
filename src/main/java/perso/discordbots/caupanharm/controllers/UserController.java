@@ -29,7 +29,7 @@ public class UserController extends MongoController {
     public void insertUser(String discordId, String riotId, String riotPuuid, String riotUsername) {
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         try {
-            CaupanharmUser newUser = new CaupanharmUser(discordId, riotId, riotPuuid, riotUsername, false);
+            CaupanharmUser newUser = new CaupanharmUser(discordId, riotId, riotPuuid, riotUsername);
             collection.insertOne(newUser);
             logger.info("Created user: " + newUser);
         } catch (MongoException me) {
@@ -122,6 +122,14 @@ public class UserController extends MongoController {
         } catch (MongoException me) {
             logger.error("Unable to delete a document due to an error: " + me);
         }
+    }
+
+    public List<CaupanharmUser> getUsersFromDiscordId(List<String> ids){
+        List<CaupanharmUser> result = new ArrayList<>();
+        for(String discordId : ids){
+            result.add(getUser("discordId",discordId));
+        }
+        return result;
     }
 
 }

@@ -9,21 +9,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import perso.discordbots.caupanharm.commands.Val.TeamCommand;
 import perso.discordbots.caupanharm.controllers.EmojiController;
+import perso.discordbots.caupanharm.controllers.UserController;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CaupanharmTeam {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private String name;
-    private List<String> members = new ArrayList<>();
-    private List<String> tier2members = new ArrayList<>(), tier1members = new ArrayList<>();
+    @Autowired
+    UserController userController;
 
-    public CaupanharmTeam(String name, String discordId) {
+    private String name;
+    private List<String> members = new ArrayList<>(), tier1members = new ArrayList<>(), tier2members = new ArrayList<>();
+
+    public CaupanharmTeam(String name, CaupanharmUser user) {
         this.name = name;
-        members.add(discordId); // Tier 2 member AKA creator, all joining members will be tier 0, members can be promoted to tier 1 for more management options
-        tier2members.add(discordId);
+        members.add(user.getDiscordId());
+        tier2members.add(user.getDiscordId());// Tier 2 member AKA creator, all joining members will be tier 0, members can be promoted to tier 1 for more management options
     }
 
     public CaupanharmTeam() {
@@ -43,24 +47,6 @@ public class CaupanharmTeam {
                 '}';
     }
 
-    public EmbedCreateSpec fetchAndFormatTeamEmbed() {
-        EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
-                .color(Color.YELLOW)
-                .title("Team **Osiris**")
-                .description("__Membres:__");
-
-        String unrankedIconName = "OSRUnranked";
-        String unrankedIconId = EmojiController.getEmojiByName(unrankedIconName);
-
-
-        String temp = "";
-        for(String id : members){
-            temp += String.format("<:%s:%s> <@%s>\n", unrankedIconName, unrankedIconId, id);
-        }
-        embedBuilder.addField("\u200b", temp, false);
-
-        return embedBuilder.build();
-    }
 
     public String getName() {
         return name;
@@ -78,14 +64,6 @@ public class CaupanharmTeam {
         this.members = members;
     }
 
-    public List<String> getTier2members() {
-        return tier2members;
-    }
-
-    public void setTier2members(List<String> tier2members) {
-        this.tier2members = tier2members;
-    }
-
     public List<String> getTier1members() {
         return tier1members;
     }
@@ -94,14 +72,22 @@ public class CaupanharmTeam {
         this.tier1members = tier1members;
     }
 
-    public void addMember(String discordUserId) {
-        members.add(discordUserId);
+    public List<String> getTier2members() {
+        return tier2members;
     }
 
-    public void removeMember(String discordUserId) {
-        members.remove(discordUserId);
-        tier1members.remove(discordUserId);
-        tier2members.remove(discordUserId);
+    public void setTier2members(List<String> tier2members) {
+        this.tier2members = tier2members;
+    }
+
+    public void addMember(CaupanharmUser user) {
+        members.add(user.getDiscordId());
+    }
+
+    public void removeMember(CaupanharmUser user) {
+        members.remove(user);
+        tier1members.remove(user);
+        tier2members.remove(user);
     }
 
     /**
