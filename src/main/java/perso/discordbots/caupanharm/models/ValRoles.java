@@ -3,22 +3,21 @@ package perso.discordbots.caupanharm.models;
 
 public enum ValRoles {
 
-    CONTROLLER("controller", "Contrôleur", "controller"),
+    CONTROLLER("controller", "Contrôleur"),
 
-    DUELIST("duelist", "Duelliste", "duelist"),
+    DUELIST("duelist", "Duelliste"),
 
-    INITIATOR("initiator", "Initiateur", "initiator"),
+    INITIATOR("initiator", "Initiateur"),
 
-    SENTINEL("sentinel", "Sentinelle", "sentinel"),
+    SENTINEL("sentinel", "Sentinelle"),
 
-    FLEX("flex", "Flex", null);
+    FLEX("flex", "Flex");
 
-    private final String name, formattedName, emojiName;
+    private final String name, formattedName;
 
-    ValRoles(String name, String formattedName, String emojiName) {
+    ValRoles(String name, String formattedName) {
         this.name = name;
         this.formattedName = formattedName;
-        this.emojiName = emojiName;
     }
 
     public String getName() {
@@ -28,10 +27,5 @@ public enum ValRoles {
     public String getFormattedName() {
         return formattedName;
     }
-
-    public String getEmojiName() {
-        return emojiName;
-    }
-
 
 }

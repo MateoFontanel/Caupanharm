@@ -53,19 +53,19 @@ public class InitCommand implements SlashCommand {
                 Button button_roles = Button.primary("get-roles", "Voir mes rôles");
 
                 Button button_controller = Button.secondary("set-controller",
-                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.CONTROLLER.getName())), ValRoles.CONTROLLER.getEmojiName(), false),
+                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.CONTROLLER.getName())), ValRoles.CONTROLLER.getName(), false),
                         ValRoles.CONTROLLER.getFormattedName());
 
                 Button button_duelist = Button.secondary("set-duelist",
-                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.DUELIST.getName())), ValRoles.DUELIST.getEmojiName(), false),
+                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.DUELIST.getName())), ValRoles.DUELIST.getName(), false),
                         ValRoles.DUELIST.getFormattedName());
 
                 Button button_initiator = Button.secondary("set-initiator",
-                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.INITIATOR.getName())), ValRoles.INITIATOR.getEmojiName(), false),
+                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.INITIATOR.getName())), ValRoles.INITIATOR.getName(), false),
                         ValRoles.INITIATOR.getFormattedName());
 
                 Button button_sentinel = Button.secondary("set-sentinel",
-                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.SENTINEL.getName())), ValRoles.SENTINEL.getEmojiName(), false),
+                        ReactionEmoji.of(Long.parseLong(emojiController.getEmojiByName(ValRoles.SENTINEL.getName())), ValRoles.SENTINEL.getName(), false),
                         ValRoles.SENTINEL.getFormattedName());
 
                 List<Button> buttons = new ArrayList<>(List.of(button_roles, button_controller, button_duelist, button_initiator, button_sentinel));

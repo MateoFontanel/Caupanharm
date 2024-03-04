@@ -1,10 +1,17 @@
 package perso.discordbots.caupanharm.models.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.LinkedHashMap;
 
+// Hotfix class used to fetch specific data from Henrik's endpoints
+// TODO ? A full implementation would require to create classes for every data type of the API. Easily doable. Also very long to do (:
 public class HenrikApiResponse {
     int status;
     LinkedHashMap<String, Object> data;
+
+
 
     public HenrikApiResponse() {
     }
@@ -25,9 +32,15 @@ public class HenrikApiResponse {
                 henrikCard);
     }
 
-    public String getMmr(){
+    public String getMmr(String season){ // TODO there gotta be a better way to do that RIGHT ??
+        data = ((LinkedHashMap<String,Object>) data.get("by_season"));
+        if(data.get(season) == null){
+            return "unranked";
+        }else{
+            data = ((LinkedHashMap<String,Object>) data.get(season));
+            return data.get("final_rank_patched").toString();
+        }
 
-        return null;
     }
 
 

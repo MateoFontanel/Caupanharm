@@ -94,7 +94,7 @@ public class LinkCommand implements SlashCommand {
                                     requestingCaupanharmUser.getDiscordId(),
                                     apiController.getLeagueUser(newRiotUser) == null ? null : riotLeagueUser.getId(), // riotId means League id which can be null if the user never played League
                                     newRiotUser.getPuuid(),
-                                    apiController.getHenrikUser(requestingCaupanharmUser.getRiotUsername(), true).getPuuid(), // henrik puuid of the new username
+                                    apiController.getHenrikUser(newRiotUser.getFullName(), true).getPuuid(), // henrik puuid of the new username
                                     newRiotUser.getFullName());
                             editedCaupanharmUser.setTeam(requestingCaupanharmUser.getTeam());
                             editedCaupanharmUser.setTracked(requestingCaupanharmUser.isTracked());
