@@ -12,21 +12,24 @@ import perso.discordbots.caupanharm.util.RequestBuilder;
 
 import java.net.http.HttpResponse;
 
+
+@SuppressWarnings("unused")
 @Controller
 public class APIController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @SuppressWarnings("unused")
     @Value("${riot_api_key}")
     String riot_api_key;
 
+    @SuppressWarnings("unused")
     @Value("${henrik_api_key}")
     String henrik_api_key;
 
+    @SuppressWarnings("unused")
     @Value("${val_current_season}")
     String current_season;
 
-    public APIController() {
-    }
 
     public RiotUser getRiotUser(String completeUsername) {
         String username = completeUsername.split("#")[0].trim();

@@ -1,6 +1,5 @@
 package perso.discordbots.caupanharm.commands.general;
 
-import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent;
 import discord4j.core.event.domain.interaction.MessageInteractionEvent;
 import discord4j.core.object.entity.Message;
 import org.slf4j.Logger;

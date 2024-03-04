@@ -1,4 +1,4 @@
-package perso.discordbots.caupanharm.commands.Val;
+package perso.discordbots.caupanharm.commands.val;
 
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandInteractionOption;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import perso.discordbots.caupanharm.controllers.EmojiController;
 import perso.discordbots.caupanharm.models.ValRanks;
 import perso.discordbots.caupanharm.models.ValRoles;
-import perso.discordbots.caupanharm.models.api.HenrikUser;
 import perso.discordbots.caupanharm.util.ResponseBuilder;
 import perso.discordbots.caupanharm.commands.SlashCommand;
 import perso.discordbots.caupanharm.controllers.APIController;

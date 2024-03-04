@@ -6,7 +6,6 @@ import discord4j.core.spec.InteractionApplicationCommandCallbackReplyMono;
 import discord4j.core.spec.InteractionReplyEditMono;
 import discord4j.discordjson.possible.Possible;
 import discord4j.rest.util.AllowedMentions;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;

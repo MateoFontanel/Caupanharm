@@ -3,21 +3,10 @@ package perso.discordbots.caupanharm.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
-import perso.discordbots.caupanharm.models.CaupanharmChannel;
-import perso.discordbots.caupanharm.models.CaupanharmTeam;
-import perso.discordbots.caupanharm.models.CaupanharmUser;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.rmi.server.ExportException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -34,10 +23,11 @@ public class ChannelController {
         games.put("VAL", "VALORANT");
         games.put("LOL", "League Of Legends");
         try {
+            //noinspection unchecked
             channels = mapper.readValue(channelsFile, HashMap.class);
             logger.info("Retrieved authorized channels list");
         } catch (Exception e) {
-            channels = new HashMap<String, String>();
+            channels = new HashMap<>();
             mapper.writeValue(channelsFile, channels);
             logger.info("Created the list of authorized channels");
         }

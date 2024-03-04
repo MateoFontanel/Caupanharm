@@ -1,18 +1,11 @@
 package perso.discordbots.caupanharm.models;
 
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.discordjson.json.EmojiData;
-import discord4j.rest.entity.RestEmoji;
-import discord4j.rest.util.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import perso.discordbots.caupanharm.commands.Val.TeamCommand;
-import perso.discordbots.caupanharm.controllers.EmojiController;
 import perso.discordbots.caupanharm.controllers.UserController;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CaupanharmTeam {
@@ -117,7 +110,7 @@ public class CaupanharmTeam {
     /**
      * Check if user is the team captain (tier 2 as of now, can be modified)
      *
-     * @param discordId
+     * @param discordId of the user
      * @return yes if so
      */
     public boolean isHigherTier(String discordId) {

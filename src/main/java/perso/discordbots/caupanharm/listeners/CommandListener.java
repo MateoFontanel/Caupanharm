@@ -10,7 +10,6 @@ import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ErrorHandler;
 import perso.discordbots.caupanharm.commands.Command;
 import perso.discordbots.caupanharm.commands.MessageCommand;
 import perso.discordbots.caupanharm.commands.SlashCommand;

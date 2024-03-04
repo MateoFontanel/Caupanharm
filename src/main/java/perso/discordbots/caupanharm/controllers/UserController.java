@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import static com.mongodb.client.model.Filters.eq;
 
-import perso.discordbots.caupanharm.models.CaupanharmTeam;
 import perso.discordbots.caupanharm.models.CaupanharmUser;
 
 import java.util.ArrayList;

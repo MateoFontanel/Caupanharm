@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class GameTracker extends Thread {
     private final Logger logger = LoggerFactory.getLogger(GameTracker.class);
-    private List<String> ingameUsersIds = new ArrayList<>();
+    private final List<String> ingameUsersIds = new ArrayList<>();
 
     @Autowired
     UserController userController;

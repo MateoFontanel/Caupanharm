@@ -1,4 +1,4 @@
-package perso.discordbots.caupanharm.commands.League;
+package perso.discordbots.caupanharm.commands.league;
 
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandInteractionOption;

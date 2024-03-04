@@ -16,9 +16,6 @@ import perso.discordbots.caupanharm.models.api.RiotLeagueUser;
 import perso.discordbots.caupanharm.models.api.RiotUser;
 import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Objects;
-
 // TODO clear MongoDB logs
 @Component
 public class LinkCommand implements SlashCommand {

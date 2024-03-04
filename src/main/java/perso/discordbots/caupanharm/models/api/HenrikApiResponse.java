@@ -1,8 +1,5 @@
 package perso.discordbots.caupanharm.models.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.util.LinkedHashMap;
 
 // Hotfix class used to fetch specific data from Henrik's endpoints
@@ -10,8 +7,6 @@ import java.util.LinkedHashMap;
 public class HenrikApiResponse {
     int status;
     LinkedHashMap<String, Object> data;
-
-
 
     public HenrikApiResponse() {
     }

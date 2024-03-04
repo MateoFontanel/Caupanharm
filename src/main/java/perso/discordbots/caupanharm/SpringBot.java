@@ -5,7 +5,6 @@ import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
 import discord4j.rest.RestClient;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +22,6 @@ import java.io.IOException;
 @SpringBootApplication(scanBasePackages = "perso.discordbots.caupanharm")
 @EnableAutoConfiguration(exclude = {MongoAutoConfiguration.class})
 public class SpringBot {
-    private static TrackerDeprecated trackerDeprecated;
     private final static Logger logger = LoggerFactory.getLogger(SpringBot.class);
 
     @Value("${discord_bot_token}")
@@ -41,23 +39,6 @@ public class SpringBot {
                 .build()
                 .run(args);
     }
-
-
-    public static void setTracker(String summoner, String champion) {
-        trackerDeprecated.interrupt();
-        trackerDeprecated = new TrackerDeprecated(summoner, champion);
-        trackerDeprecated.start();
-    }
-
-    public static void setTracker(TrackerDeprecated newTrackerDeprecated) {
-        trackerDeprecated = newTrackerDeprecated;
-        trackerDeprecated.start();
-    }
-
-    public static TrackerDeprecated getTracker() {
-        return trackerDeprecated;
-    }
-
 
     /*
     @Bean

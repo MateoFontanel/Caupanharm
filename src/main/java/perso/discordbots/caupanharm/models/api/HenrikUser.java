@@ -1,7 +1,5 @@
 package perso.discordbots.caupanharm.models.api;
 
-import java.util.Map;
-
 public class HenrikUser {
     String puuid, region, name, tag, last_update;
     int account_level;

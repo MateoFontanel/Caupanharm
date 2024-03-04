@@ -1,4 +1,4 @@
-package perso.discordbots.caupanharm.commands.League;
+package perso.discordbots.caupanharm.commands.league;
 
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import perso.discordbots.caupanharm.commands.SlashCommand;
 import perso.discordbots.caupanharm.controllers.APIController;
 import reactor.core.publisher.Mono;
-
-import java.io.UnsupportedEncodingException;
 
 // TODO not implemented yet
 @Component

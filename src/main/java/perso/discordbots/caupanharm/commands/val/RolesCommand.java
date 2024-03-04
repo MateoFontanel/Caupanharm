@@ -1,4 +1,4 @@
-package perso.discordbots.caupanharm.commands.Val;
+package perso.discordbots.caupanharm.commands.val;
 
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.object.entity.User;
