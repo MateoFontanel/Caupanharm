@@ -47,10 +47,10 @@ public class LinkCommand implements SlashCommand {
                 String completeUsername = getSubcommandValue(event, "add", "username");
 
                 if (registeredUser != null)
-                    return ResponseBuilder.build(event, "**Error:** You already linked an account to Caupanharm (" + registeredUser.getRiotUsername() + ")", null, true, false);
+                    return ResponseBuilder.buildReply(event, "**Error:** You already linked an account to Caupanharm (" + registeredUser.getRiotUsername() + ")", null, true, false);
 
                 if (!(completeUsername.contains("#")))
-                    return ResponseBuilder.build(event, "**Error:** Invalid username", null,true, false);
+                    return ResponseBuilder.buildReply(event, "**Error:** Invalid username", null,true, false);
 
                 RiotAPIUser riotAPIUser = null;
                 try {
