@@ -5,6 +5,7 @@ import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
 import discord4j.rest.RestClient;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import perso.discordbots.caupanharm.controllers.*;
-import perso.discordbots.caupanharm.models.ValRoles;
 import perso.discordbots.caupanharm.threads.TrackerDeprecated;
 
 import java.io.IOException;
@@ -42,6 +42,7 @@ public class SpringBot {
                 .run(args);
     }
 
+
     public static void setTracker(String summoner, String champion) {
         trackerDeprecated.interrupt();
         trackerDeprecated = new TrackerDeprecated(summoner, champion);
@@ -64,8 +65,8 @@ public class SpringBot {
      */
 
     @Bean
-    public RiotAPIController riotAPIController(){
-        return new RiotAPIController();
+    public APIController apiController(){
+        return new APIController();
     }
 
     @Bean

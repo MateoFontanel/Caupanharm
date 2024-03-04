@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import perso.discordbots.caupanharm.models.CaupanharmTeam;
 import perso.discordbots.caupanharm.models.CaupanharmUser;
 
 import java.util.ArrayList;
@@ -26,12 +27,22 @@ public class UserController extends MongoController {
         super();
     }
 
-    public void insertUser(String discordId, String riotId, String riotPuuid, String riotUsername) {
+    public void insertUser(String discordId, String riotId, String riotPuuid, String henrikPuuid, String riotUsername) {
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
         try {
-            CaupanharmUser newUser = new CaupanharmUser(discordId, riotId, riotPuuid, riotUsername);
+            CaupanharmUser newUser = new CaupanharmUser(discordId, riotId, riotPuuid, henrikPuuid, riotUsername);
             collection.insertOne(newUser);
             logger.info("Created user: " + newUser);
+        } catch (MongoException me) {
+            logger.error("Unable to insert any data into MongoDB due to an error: " + me);
+        }
+    }
+
+    public void insertUser(CaupanharmUser caupanharmUser) {
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
+        try {
+            collection.insertOne(caupanharmUser);
+            logger.info("Created user: " + caupanharmUser);
         } catch (MongoException me) {
             logger.error("Unable to insert any data into MongoDB due to an error: " + me);
         }
@@ -51,6 +62,13 @@ public class UserController extends MongoController {
     }
 
      */
+
+    public void replaceUser(String discordId, CaupanharmUser replacement){
+        MongoCollection<CaupanharmUser> collection = database.getCollection("users",CaupanharmUser.class);
+        Bson query = Filters.eq("discordId",discordId);
+        UpdateResult result = collection.replaceOne(query, replacement);
+        logger.info("Replaced "+result.getModifiedCount()+" document in teams collection");
+    }
 
     public List<CaupanharmUser> getUsers(String key, Object value) {
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
@@ -102,12 +120,12 @@ public class UserController extends MongoController {
 
     public void updateUsers(String keyFilter, Object valueFilter, String keyToEdit, Object newValue) {
         MongoCollection<CaupanharmUser> collection = database.getCollection("users", CaupanharmUser.class);
-        Bson query = eq(keyFilter,valueFilter);
+        Bson query = eq(keyFilter, valueFilter);
         Bson updateFilter = Updates.set(keyToEdit, newValue);
 
         try {
             UpdateResult result = collection.updateMany(query, updateFilter);
-            logger.info("Modified document count: "+result.getModifiedCount());
+            logger.info("Modified document count: " + result.getModifiedCount());
         } catch (MongoException me) {
             logger.error("Unable to update any document due to an error: " + me);
         }
@@ -124,10 +142,10 @@ public class UserController extends MongoController {
         }
     }
 
-    public List<CaupanharmUser> getUsersFromDiscordId(List<String> ids){
+    public List<CaupanharmUser> getUsersFromDiscordId(List<String> ids) {
         List<CaupanharmUser> result = new ArrayList<>();
-        for(String discordId : ids){
-            result.add(getUser("discordId",discordId));
+        for (String discordId : ids) {
+            result.add(getUser("discordId", discordId));
         }
         return result;
     }

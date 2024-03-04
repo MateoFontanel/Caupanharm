@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import perso.discordbots.caupanharm.util.ResponseBuilder;
 import perso.discordbots.caupanharm.commands.SlashCommand;
-import perso.discordbots.caupanharm.controllers.RiotAPIController;
+import perso.discordbots.caupanharm.controllers.APIController;
 import perso.discordbots.caupanharm.controllers.UserController;
 import perso.discordbots.caupanharm.models.CaupanharmUser;
-import perso.discordbots.caupanharm.models.LeagueAPIUser;
-import perso.discordbots.caupanharm.models.RiotAPIUser;
+import perso.discordbots.caupanharm.models.api.RiotLeagueUser;
+import perso.discordbots.caupanharm.models.api.RiotUser;
 import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
@@ -27,7 +27,7 @@ public class LinkCommand implements SlashCommand {
     @Autowired
     UserController userController;
     @Autowired
-    RiotAPIController riotAPIController;
+    APIController apiController;
 
 
     @Override
@@ -37,84 +37,88 @@ public class LinkCommand implements SlashCommand {
 
     @Override
     public Mono<Void> handle(ChatInputInteractionEvent event) {
-        String discordId = event.getInteraction().getUser().getId().asString();
-        CaupanharmUser registeredUser = userController.getUser("discordId", discordId);
+        String requestingUserDiscordId = event.getInteraction().getUser().getId().asString();
+        CaupanharmUser requestingCaupanharmUser = userController.getUser("discordId", requestingUserDiscordId);
         String response;
 
         // Note: some if/else are cascading on purpose to reduce calls to APIs in non-necessary cases // TODO REMOVE THEM USING RESPONSEBUILDER INSTEAD
         switch (event.getOptions().get(0).getName()) {
             case ("add"):
-                String completeUsername = getSubcommandValue(event, "add", "username");
+                String newUsername = getSubcommandValue(event, "add", "username");
 
-                if (registeredUser != null)
-                    return ResponseBuilder.buildReply(event, "**Error:** You already linked an account to Caupanharm (" + registeredUser.getRiotUsername() + ")", null, true, false);
+                if (requestingCaupanharmUser != null)
+                    return ResponseBuilder.buildReply(event, "**Error:** You already linked an account to Caupanharm (" + requestingCaupanharmUser.getRiotUsername() + ")", null, true, false);
 
-                if (!(completeUsername.contains("#")))
-                    return ResponseBuilder.buildReply(event, "**Error:** Invalid username", null,true, false);
+                if (!(newUsername.contains("#")))
+                    return ResponseBuilder.buildReply(event, "**Error:** Invalid username", null, true, false);
 
-                RiotAPIUser riotAPIUser = null;
-                try {
-                    riotAPIUser = riotAPIController.getRiotUser(completeUsername);
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
-                if (riotAPIUser == null) {
+                RiotUser newRiotUser = null;
+                newRiotUser = apiController.getRiotUser(newUsername);
+                if (newRiotUser == null) {
                     response = "**Error: **This Riot account does not exist";
-                } else if (userController.getUser("riotPuuid", riotAPIUser.getPuuid()) != null) {
+                } else if (userController.getUser("riotPuuid", newRiotUser.getPuuid()) != null) {
                     response = "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
                 } else {
-                    LeagueAPIUser leagueAPIUser = riotAPIController.getLeagueUser(riotAPIUser);
-                    userController.insertUser(discordId,
-                            (riotAPIController.getLeagueUser(riotAPIUser) == null) ? null : leagueAPIUser.getId(),
-                            riotAPIUser.getPuuid(),
-                            riotAPIUser.getFullName());
-                    response = "Account " + riotAPIUser.getFullName() + " is now linked to Caupanharm";
+                    RiotLeagueUser newRiotLeagueUser = apiController.getLeagueUser(newRiotUser);
+                    String newHenrikPuuid = apiController.getHenrikUser(newRiotUser.getFullName(), true).getPuuid();
+                    CaupanharmUser newCaupanharmUser = new CaupanharmUser(requestingUserDiscordId,
+                            (apiController.getLeagueUser(newRiotUser) == null) ? null : newRiotLeagueUser.getId(), // league id, null if riot user never played LoL
+                            newRiotUser.getPuuid(),
+                            newHenrikPuuid,
+                            newRiotUser.getFullName());
+                    userController.insertUser(newCaupanharmUser);
+                    response = "Account " + newCaupanharmUser.getRiotUsername() + " is now linked to Caupanharm";
                 }
 
                 break;
 
             case "edit":
-                completeUsername = getSubcommandValue(event, "edit", "username");
+                newUsername = getSubcommandValue(event, "edit", "username");
 
-                if (registeredUser == null) {
+                if (requestingCaupanharmUser == null) {
                     response = "**Error:** You have not linked your Riot account to Caupanharm yet\nTry using */link add* instead";
                 } else {
-                    try {
-                        riotAPIUser = riotAPIController.getRiotUser(completeUsername);
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
-                    if (riotAPIUser == null) {
+                    newRiotUser = apiController.getRiotUser(newUsername);
+                    if (newRiotUser == null) {
                         response = "**Error: **This Riot account does not exist";
                     } else {
-                        CaupanharmUser checkedUser = userController.getUser("riotPuuid", riotAPIUser.getPuuid());
-                        if (checkedUser != null) {
-                            response = (Objects.equals(checkedUser.getDiscordId(), discordId)) ?
+                        CaupanharmUser newCaupanharmUser = userController.getUser("riotPuuid", newRiotUser.getPuuid());
+                        if (newCaupanharmUser != null) {
+                            response = newCaupanharmUser.getRiotPuuid().equals(requestingCaupanharmUser.getRiotPuuid()) ?
                                     "**Error:** You are already linked to this Riot account" :
                                     "**Error:** This Riot account is already linked to another user\nIf you think this is a mistake, please contact an admin";
                         } else {
-                            LeagueAPIUser leagueAPIUser = riotAPIController.getLeagueUser(riotAPIUser);
-                            userController.updateUser("discordId", discordId, "riotUsername", riotAPIUser.getFullName());
-                            userController.updateUser("discordId", discordId, "riotId", (riotAPIController.getLeagueUser(riotAPIUser) == null) ? null : leagueAPIUser.getId());
-                            userController.updateUser("discordId", discordId, "riotPuuid", riotAPIUser.getPuuid());
-                            response = "Your linked account was updated from " + registeredUser.getRiotUsername() + " to " + riotAPIUser.getFullName();
+                            RiotLeagueUser riotLeagueUser = apiController.getLeagueUser(newRiotUser);
+
+                            CaupanharmUser editedCaupanharmUser = new CaupanharmUser(
+                                    requestingCaupanharmUser.getDiscordId(),
+                                    apiController.getLeagueUser(newRiotUser) == null ? null : riotLeagueUser.getId(), // riotId means League id which can be null if the user never played League
+                                    newRiotUser.getPuuid(),
+                                    apiController.getHenrikUser(requestingCaupanharmUser.getRiotUsername(), true).getPuuid(), // henrik puuid of the new username
+                                    newRiotUser.getFullName());
+                            editedCaupanharmUser.setTeam(requestingCaupanharmUser.getTeam());
+                            editedCaupanharmUser.setTracked(requestingCaupanharmUser.isTracked());
+                            editedCaupanharmUser.setRoles(requestingCaupanharmUser.getRoles());
+
+                            userController.replaceUser(requestingCaupanharmUser.getDiscordId(), editedCaupanharmUser);
+                            response = "Your linked account was updated from " + requestingCaupanharmUser.getRiotUsername() + " to " + editedCaupanharmUser.getRiotUsername();
                         }
                     }
                 }
                 break;
 
             case "remove":
-                if (registeredUser == null) {
+                if (requestingCaupanharmUser == null) {
                     response = "**Error:** You didn't link your Riot account to Caupanharm yet\nTry using */link add*";
                 } else {
                     userController.deleteUser("discordId", event.getInteraction().getUser().getId().asString());
-                    response = "Your account (" + registeredUser.getRiotUsername() + ") was successfully deleted from Caupanharm";
+                    response = "Your account (" + requestingCaupanharmUser.getRiotUsername() + ") was successfully deleted from Caupanharm";
                 }
                 break;
 
             case "check":
-                response = (registeredUser != null) ?
-                        "You are currently linked to " + registeredUser.getRiotUsername() :
+                response = (requestingCaupanharmUser != null) ?
+                        "You are currently linked to " + requestingCaupanharmUser.getRiotUsername() :
                         "You didn't link your Riot account to Caupanharm yet\nTry using */link add*";
                 break;
 

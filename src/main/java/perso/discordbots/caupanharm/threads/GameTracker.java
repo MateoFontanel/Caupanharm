@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import perso.discordbots.caupanharm.controllers.RiotAPIController;
+import perso.discordbots.caupanharm.controllers.APIController;
 import perso.discordbots.caupanharm.controllers.UserController;
 import perso.discordbots.caupanharm.models.CaupanharmUser;
 
@@ -22,11 +22,10 @@ public class GameTracker extends Thread {
     UserController userController;
 
     @Autowired
-    RiotAPIController riotAPIController;
+    APIController apiController;
 
     @EventListener(ApplicationReadyEvent.class) // Starts the thread once Spring Boot has been initialized
     public void run() {
-        riotAPIController.setDebug(false); // TODO logs de l'api riot désactivé pour la lisibilité des logs de ce thread
         while (!Thread.currentThread().isInterrupted())
         {
             try
@@ -37,7 +36,7 @@ public class GameTracker extends Thread {
                     //      max 20 requests per second = max 20 users, need to delay calls to allow more users, for example 15 users being called then 15 others the next second, etc.
                     //      max 100 requests per 120 seconds = approx 1 request every 830ms on average per tracked user ; as a first step, I will round it to 1s as this does not take into account calls made by other classes of the project. Later on, I should TODO create a rate controller
 
-                    boolean userIsInGame = riotAPIController.getActiveLeagueGame(user);
+                    boolean userIsInGame = apiController.getActiveLeagueGame(user);
                     if(userIsInGame && !(ingameUsersIds.contains(user.getRiotId()))){
                         logger.info(user.getRiotUsername() + " entered a game.");
                         ingameUsersIds.add(user.getRiotId());

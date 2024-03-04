@@ -12,9 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import perso.discordbots.caupanharm.controllers.EmojiController;
 import perso.discordbots.caupanharm.models.ValRoles;
+import perso.discordbots.caupanharm.models.api.HenrikUser;
 import perso.discordbots.caupanharm.util.ResponseBuilder;
 import perso.discordbots.caupanharm.commands.SlashCommand;
-import perso.discordbots.caupanharm.controllers.RiotAPIController;
+import perso.discordbots.caupanharm.controllers.APIController;
 import perso.discordbots.caupanharm.controllers.TeamController;
 import perso.discordbots.caupanharm.controllers.UserController;
 import perso.discordbots.caupanharm.models.CaupanharmTeam;
@@ -34,7 +35,7 @@ public class TeamCommand implements SlashCommand {
     UserController userController;
 
     @Autowired
-    RiotAPIController riotAPIController;
+    APIController apiController;
     @Autowired
     TeamController teamController;
 
@@ -182,25 +183,31 @@ public class TeamCommand implements SlashCommand {
     }
 
     public EmbedCreateSpec fetchAndFormatTeamEmbed(CaupanharmTeam team) {
+
+
         EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
                 .color(Color.YELLOW)
                 .title(String.format("Team **%s**", team.getName()));
 
         StringBuilder col1 = new StringBuilder();
         StringBuilder col2 = new StringBuilder();
+        StringBuilder col3 = new StringBuilder();
         Iterator<CaupanharmUser> it_users = userController.getUsersFromDiscordId(team.getMembers()).listIterator();
         while (it_users.hasNext()) {
             CaupanharmUser member = it_users.next();
+            logger.info(apiController.getHenrikUser(member.getRiotUsername(), true).toString());
+
+
             col1.append(String.format("<@%s>", member.getDiscordId()));
 
             if(member.getRoles().size() == 0){
-                col2.append("\u200b"); // Discord doesn't allow empty strings so this is a way to bypass that
+                col3.append("\u200b"); // Discord doesn't allow empty strings so this is a way to bypass that
             }else{
                 Iterator<ValRoles> it_roles = member.getRoles().listIterator();
                 while (it_roles.hasNext()) {
                     ValRoles role = it_roles.next();
-                    col2.append(emojiController.formatEmoji(role.getEmojiName()));
-                    if (it_roles.hasNext()) col2.append(" ");
+                    col3.append(emojiController.formatEmoji(role.getEmojiName()));
+                    if (it_roles.hasNext()) col3.append(" ");
                 }
             }
 
@@ -208,11 +215,13 @@ public class TeamCommand implements SlashCommand {
             if (it_users.hasNext()) {
                 col1.append("\n");
                 col2.append("\n");
+                col3.append("\n");
             }
         }
 
-        embedBuilder.addField("__Membres__", col1.toString(), true);
-        embedBuilder.addField("__Rôles__", col2.toString(), true);
+        embedBuilder.addField("__Membre__", col1.toString(), true);
+        embedBuilder.addField("__Rang__", col2.toString(), true);
+        embedBuilder.addField("__Rôles__", col3.toString(), true);
 
         return embedBuilder.build();
     }

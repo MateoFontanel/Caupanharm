@@ -1,13 +1,10 @@
-package perso.discordbots.caupanharm.models;
+package perso.discordbots.caupanharm.models.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import perso.discordbots.caupanharm.SpringBot;
 
 @JsonPropertyOrder({"id","accountId","puuid", "name", "profileIconId", "revisionDate", "summonerLevel"})
-public class LeagueAPIUser {
+public class RiotLeagueUser {
     private String id, accountId, puuid, name;
     private int profileIconId;
     private long revisionDate, summonerLevel;

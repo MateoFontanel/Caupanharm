@@ -6,20 +6,16 @@ import java.util.List;
 public class CaupanharmUser {
     // POJO (Plain Old Java Object) class defining a user. This class is a POJO because it contains getters and
     // setters for every member variable as well as an empty constructor.
-    private String discordId;
-    private String riotId;
-    private String riotPuuid;
-    private String riotUsername;
-
-    private String team;
+    private String discordId, riotId, riotPuuid, riotUsername, henrikPuuid, team;
     private boolean tracked;
 
     private List<ValRoles> roles;
 
-    public CaupanharmUser(String discordId, String riotId, String riotPuuid, String riotUsername) {
+    public CaupanharmUser(String discordId, String riotId, String riotPuuid, String henrikPuuid, String riotUsername) {
         this.discordId = discordId;
         this.riotId = riotId;
         this.riotPuuid = riotPuuid;
+        this.henrikPuuid = henrikPuuid;
         this.riotUsername = riotUsername;
         this.tracked = false;
         this.team = null;
@@ -39,6 +35,7 @@ public class CaupanharmUser {
                 ", riotId='" + riotId + '\'' +
                 ", riotPuuid='" + riotPuuid + '\'' +
                 ", riotUsername='" + riotUsername + '\'' +
+                ", henrikPuuid='" + henrikPuuid + '\'' +
                 ", team='" + team + '\'' +
                 ", tracked=" + tracked +
                 ", roles=" + roles +
@@ -75,6 +72,14 @@ public class CaupanharmUser {
 
     public void setRiotUsername(String riotUsername) {
         this.riotUsername = riotUsername;
+    }
+
+    public String getHenrikPuuid() {
+        return henrikPuuid;
+    }
+
+    public void setHenrikPuuid(String henrikPuuid) {
+        this.henrikPuuid = henrikPuuid;
     }
 
     public boolean isTracked() {
