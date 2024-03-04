@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import perso.discordbots.caupanharm.controllers.*;
+import perso.discordbots.caupanharm.models.ValRoles;
 import perso.discordbots.caupanharm.threads.TrackerDeprecated;
 
 import java.io.IOException;
@@ -30,6 +31,9 @@ public class SpringBot {
 
     @Value("${emojis_guild_id}")
     String emojis_guild_id;
+
+    @Value("${mongodb_db_name}")
+    String db_name;
 
 
     public static void main(String[] args) {
@@ -66,7 +70,7 @@ public class SpringBot {
 
     @Bean
     public UserController userController() {
-        return new UserController("Caupanharm_db");
+        return new UserController(db_name);
     }
 
     @Bean
