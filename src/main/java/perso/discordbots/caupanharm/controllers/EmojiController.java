@@ -45,7 +45,20 @@ public class EmojiController {
         return emojis;
     }
 
-    public static String getEmojiByName(String name){
+    public String getEmojiByName(String name){
         return emojis.get(name);
+    }
+
+    public String formatEmoji(String emojiName){
+        return String.format("<:%s:%s>", emojiName, getEmojiByName(emojiName));
+    }
+
+
+    public String formatEmojiWith1Value(String format, String emojiName, String value){
+        return String.format(format, emojiName, getEmojiByName(emojiName) , value);
+    }
+
+    public String formatEmojiWith2Value(String format, String emojiName, String value1, String value2){
+        return String.format(format, emojiName, getEmojiByName(emojiName) , value1, value2);
     }
 }
