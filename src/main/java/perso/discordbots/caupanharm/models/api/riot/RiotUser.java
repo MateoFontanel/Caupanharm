@@ -1,4 +1,4 @@
-package perso.discordbots.caupanharm.models.api;
+package perso.discordbots.caupanharm.models.api.riot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

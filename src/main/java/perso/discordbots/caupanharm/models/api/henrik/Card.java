@@ -1,17 +1,17 @@
-package perso.discordbots.caupanharm.models.api;
+package perso.discordbots.caupanharm.models.api.henrik;
 
-public class HenrikCard {
+public class Card {
 
     String small, large, wide, id;
 
-    public HenrikCard(String small, String large, String wide, String id) {
+    public Card(String small, String large, String wide, String id) {
         this.small = small;
         this.large = large;
         this.wide = wide;
         this.id = id;
     }
 
-    public HenrikCard() {
+    public Card() {
     }
 
     public String getSmall() {

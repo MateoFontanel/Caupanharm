@@ -1,6 +1,7 @@
 package perso.discordbots.caupanharm.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import perso.discordbots.caupanharm.models.api.*;
 import perso.discordbots.caupanharm.models.CaupanharmUser;
+import perso.discordbots.caupanharm.models.api.henrik.AccountV1;
+import perso.discordbots.caupanharm.models.api.henrik.MmrV1;
+import perso.discordbots.caupanharm.models.api.riot.RiotLeagueUser;
+import perso.discordbots.caupanharm.models.api.riot.RiotUser;
 import perso.discordbots.caupanharm.util.RequestBuilder;
 
 import java.net.http.HttpResponse;
@@ -26,9 +31,10 @@ public class APIController {
     @Value("${henrik_api_key}")
     String henrik_api_key;
 
-    @SuppressWarnings("unused")
-    @Value("${val_current_season}")
-    String current_season;
+
+    public APIController(){
+        getValorantRank("b441ec66-669d-550d-bd34-24a678c5eb6f");
+    }
 
 
     public RiotUser getRiotUser(String completeUsername) {
@@ -48,40 +54,46 @@ public class APIController {
         return null;
     }
 
-    public HenrikUser getHenrikUser(String completeUsername, boolean updateFirst){
+    public AccountV1 getHenrikUser(String completeUsername, boolean updateFirst){
         String username = completeUsername.split("#")[0].trim();
         String tagline = completeUsername.split("#")[1].trim();
         String uri = String.format("https://api.henrikdev.xyz/valorant/v1/account/%s/%s?force=%b", username.replace(" ","%20"), tagline, updateFirst);
 
         HttpResponse<String> response = RequestBuilder.get(Apis.HENRIKDEV, uri, henrik_api_key);
-        switch(response.statusCode()){
-            case 200:
-                try{
-                    HenrikApiResponse data = new ObjectMapper().readValue(response.body(), HenrikApiResponse.class);
-                    return data.buildHenrikUser();
-                }catch(JsonProcessingException e){
-                    logger.error(String.valueOf(e));
-                }
-                break;
-
-            default:
-                logger.error(String.valueOf(response.statusCode()));
-                logger.error(response.body());
-                break;
+        if (response.statusCode() == 200) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(response.body());
+                JsonNode dataNode = rootNode.get("data");
+                String data = dataNode.toString();
+                return objectMapper.readValue(data, AccountV1.class);
+            } catch (JsonProcessingException e) {
+                logger.error("Error parsing Henrik user");
+                logger.error(String.valueOf(e));
+            }
+        } else {
+            logger.error(String.valueOf(response.statusCode()));
+            logger.error(response.body());
         }
 
         return null;
     }
 
-    public String getValorantRank(String puuid){
-        String uri = String.format("https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/eu/%s", puuid);
+    public String getValorantRank(String henrikPuuid){
+        String uri = String.format("https://api.henrikdev.xyz/valorant/v1/by-puuid/mmr/eu/%s", henrikPuuid);
         HttpResponse<String> response = RequestBuilder.get(Apis.HENRIKDEV, uri, henrik_api_key);
         switch(response.statusCode()){
             case 200:
                 try{
-                    HenrikApiResponse data = new ObjectMapper().readValue(response.body(), HenrikApiResponse.class);
-                    return data.getMmr(current_season);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode rootNode = objectMapper.readTree(response.body());
+                    JsonNode dataNode = rootNode.get("data");
+                    String data = dataNode.toString();
+                    MmrV1 result = objectMapper.readValue(data, MmrV1.class);
+
+                    return result.getCurrenttierpatched();
                 }catch(JsonProcessingException e){
+                    logger.error("Error parsing Valorant rank");
                     logger.error(String.valueOf(e));
                 }
                 break;

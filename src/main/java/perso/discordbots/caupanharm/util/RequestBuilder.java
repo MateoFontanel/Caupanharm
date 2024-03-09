@@ -22,12 +22,12 @@ public class RequestBuilder {
         switch (api) {
             case RIOT -> {
                 builder.header("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
-                if (!(api_key.equals(""))) builder.header("X-Riot-Token", api_key);
+                if (api_key != null) builder.header("X-Riot-Token", api_key);
 
             }
             case HENRIKDEV -> {
                 builder.header("Accept-Charset", "application/json; charset=UTF-8");
-                if (!(api_key.equals(""))) builder.header("Authorization", api_key);
+                if (api_key != null) builder.header("Authorization", api_key);
 
             }
         }

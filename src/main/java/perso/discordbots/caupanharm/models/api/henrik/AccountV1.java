@@ -1,12 +1,12 @@
-package perso.discordbots.caupanharm.models.api;
+package perso.discordbots.caupanharm.models.api.henrik;
 
-public class HenrikUser {
+public class AccountV1 {
     String puuid, region, name, tag, last_update;
     int account_level;
     long last_update_raw;
-    HenrikCard card;
+    Card card;
 
-    public HenrikUser(String puuid, String region, String name, String tag, String last_update, int account_level, long last_update_raw, HenrikCard card) {
+    public AccountV1(String puuid, String region, String name, String tag, String last_update, int account_level, long last_update_raw, Card card) {
         this.puuid = puuid;
         this.region = region;
         this.name = name;
@@ -17,7 +17,7 @@ public class HenrikUser {
         this.card = card;
     }
 
-    public HenrikUser() {
+    public AccountV1() {
     }
 
     public String getPuuid() {
@@ -76,11 +76,11 @@ public class HenrikUser {
         this.last_update_raw = last_update_raw;
     }
 
-    public HenrikCard getCard() {
+    public Card getCard() {
         return card;
     }
 
-    public void setCard(HenrikCard card) {
+    public void setCard(Card card) {
         this.card = card;
     }
 

@@ -12,8 +12,8 @@ import perso.discordbots.caupanharm.commands.SlashCommand;
 import perso.discordbots.caupanharm.controllers.APIController;
 import perso.discordbots.caupanharm.controllers.UserController;
 import perso.discordbots.caupanharm.models.CaupanharmUser;
-import perso.discordbots.caupanharm.models.api.RiotLeagueUser;
-import perso.discordbots.caupanharm.models.api.RiotUser;
+import perso.discordbots.caupanharm.models.api.riot.RiotLeagueUser;
+import perso.discordbots.caupanharm.models.api.riot.RiotUser;
 import reactor.core.publisher.Mono;
 
 // TODO clear MongoDB logs
