@@ -1,1 +1,1 @@
-Branch specifically used for frontend development
+Branch used for frontend development (js version, deprecated)
