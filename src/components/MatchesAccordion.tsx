@@ -5,15 +5,24 @@ import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
-interface Match {
-  //TODO
+interface MatchInterface {
+  date: string,
+  map: string,
+  result: string,
+  allyScore: number,
+  enemyScore: number
+}
+
+interface PlayerInterface{
+  name: string,
+  matches: MatchInterface[]
 }
 
 interface MatchesAccordionProps {
-  //TODO
+  playerId: number,
+  data: PlayerInterface[]
 }
 
 const Accordion = styled((props: any) => (
@@ -102,9 +111,5 @@ const MatchesAccordion: FC<MatchesAccordionProps> = ({ playerId, data }) => {
   );
 };
 
-MatchesAccordion.propTypes = {
-  playerId: PropTypes.number,
-  data: PropTypes.array,
-};
 
 export default MatchesAccordion;

@@ -11,7 +11,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 interface NavbarProps {
   value: string;
-  handleChange: (event: React.ChangeEvent<{}>, newValue: string) => void;
+  handleChange: (event: React.SyntheticEvent, newValue: string) => void;
 }
 
 const Navbar: FC<NavbarProps> = ({ value, handleChange }) => {

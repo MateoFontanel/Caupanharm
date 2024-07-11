@@ -8,11 +8,11 @@ import Box from "@mui/material/Box";
 function App() {
   const [nav, setNav] = useState<string>("home");
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+  const handleChange = (event: React.ChangeEvent<{HTMLDivElement}>, newValue: string) => {
     setNav(newValue);
   };
 
-  const renderContent = (): JSX.Element => {
+  const renderContent = () => {
     switch (nav) {
       case "home":
         return <Lorem />;

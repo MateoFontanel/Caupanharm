@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 
-const Lorem: FC = () => {
+const Lorem: React.FC = () => {
   return (
     <Box
       sx={{

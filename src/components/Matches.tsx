@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from "react";
 import {
   SingleEliminationBracket,
-  Match,
-  SVGViewer,
+  Match
 } from "@g-loot/react-tournament-brackets";
 import Box from "@mui/material/Box";
 
-interface MatchData {
-  // TODO A définir
+interface MatchParticipantInterface {
+  id: string,
+  resultText: string,
+  isWinner: boolean,
+  status: 'PLAYED' | 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY' | null,
+  name: string
+}
+
+interface MatchInterface {
+  id: string,
+  nextMatchId: string,
+  tournamentRoundText: string,
+  state: 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY' | 'DONE' | 'SCORE_DONE',
+  participants: MatchParticipantInterface[]
 }
 
 export default function Matches() {
-  const [matches, setMatches] = useState<MatchData[]>([]);
+  const [matches, setMatches] = useState<MatchInterface[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchMatches = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
       try {
         const response = await fetch("src/assets/data/bracket.json");
-        const data = await response.json();
+        const data: MatchInterface[] = await response.json();
         setMatches(data);
       } catch (error) {
         console.error("Error fetching data:", error);
