@@ -19,7 +19,6 @@ export default function Players() {
 
   React.useEffect(() => {
     const fetchPlayers = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
       try {
         let response = await fetch("src/assets/data/playersMatches.json");
         let data = await response.json();

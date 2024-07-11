@@ -1,8 +1,7 @@
 import * as React from "react";
 import {
   SingleEliminationBracket,
-  Match,
-  SVGViewer,
+  Match
 } from "@g-loot/react-tournament-brackets";
 import Box from "@mui/material/Box";
 
@@ -12,7 +11,6 @@ export default function Matches() {
 
   React.useEffect(() => {
     const fetchMatches = async () => {
-        await new Promise(resolve => setTimeout(resolve, 2000));
       try {
         const response = await fetch("src/assets/data/bracket.json");
         const data = await response.json();
