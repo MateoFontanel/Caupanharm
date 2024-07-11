@@ -12,7 +12,6 @@ export default function Matches() {
 
   React.useEffect(() => {
     const fetchMatches = async () => {
-        await new Promise(resolve => setTimeout(resolve, 2000));
       try {
         const response = await fetch("src/assets/data/bracket.json");
         const data = await response.json();
