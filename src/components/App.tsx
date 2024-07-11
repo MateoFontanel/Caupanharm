@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import NavBar from "./NavBar";
-import Lorem from "./Lorem";
+import Home from "./Home";
 import Players from "./Players";
 import Matches from "./Matches";
 import Box from "@mui/material/Box";
@@ -8,22 +8,22 @@ import Box from "@mui/material/Box";
 function App() {
   const [nav, setNav] = useState<string>("home");
 
-  const handleChange = (event: React.ChangeEvent<{HTMLDivElement}>, newValue: string) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setNav(newValue);
   };
 
   const renderContent = () => {
     switch (nav) {
       case "home":
-        return <Lorem />;
+        return <Home />;
       case "players":
         return <Players />;
       case "matches":
         return <Matches />;
       case "planning":
-        return <Lorem />;
+        return <Home />;
       default:
-        return <Lorem />;
+        return <Home />;
     }
   };
 
