@@ -14,6 +14,7 @@ dist-ssr
 .eslintrc.cjs
 .github
 .vite
+log4j.properties
 
 # Editor directories and files
 .vscode/*
