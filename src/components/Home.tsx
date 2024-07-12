@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Box from "@mui/material/Box";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
     "The current hosted project is a web app that uses React 18, Vite and Typescript. Its data is for now hardcoded."
   ]
 
-  const [alignment, setAlignment] = React.useState('fr-FR');
+  const [alignment, setAlignment] = useState('fr-FR');
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,

@@ -41,6 +41,7 @@ const UsertagTypography = styled((props: UserTypographyProps) => (
   marginLeft: theme.spacing(0.25),
 }));
 
+
 const PlayerCard: FC<PlayerCardProps> = ({ id, onClick, width, player }) => {
   const handleCardClick = () => {
     if (onClick) {

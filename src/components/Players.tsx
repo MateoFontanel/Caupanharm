@@ -37,11 +37,7 @@ interface PlayerMatchInterface {
   matches: MatchInterface[];
 }
 
-interface PlayersProps {
-  // TODO
-}
-
-const Players: FC<PlayersProps> = () => {
+const Players: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [hoveredPlayer, setHoveredPlayer] = useState<number>(-1);
   const [additionalPlayersData, setAdditionalPlayersData] = useState<AdditionalPlayerDataInterface[]>([]);
