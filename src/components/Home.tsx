@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, FC} from "react";
 import Box from "@mui/material/Box";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-const Home: React.FC = () => {
+const Home: FC = () => {
   const frenchText = [
     "Cette application est un \"tracker\" de statistiques de joueurs d'un jeu en ligne. Elle détaille une partie de leurs statistiques individuelles, ainsi que de leurs matchs récents et du dernier tournoi joué.",
     "Caupanharm est un anagramme de \"capharnaüm\", synonyme de bazar. C'est aussi le nom de ce projet fourre-tout, sans but précis, pouvant évoluer à sa guise et changer de cap à tout moment tant qu'il me permet de continuer à me former en autonomie à de nouvelles technologies.",
@@ -51,16 +51,16 @@ const Home: React.FC = () => {
       <ToggleButton value="fr-FR">Français</ToggleButton>
       <ToggleButton value="en-GB">English</ToggleButton>
     </ToggleButtonGroup>
-      <div style={{marginTop: "64px", textAlign: "center" }}>
+      <div style={{marginTop: "64px", textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>
         {(alignment == "fr-FR") ? frenchText[0] : englishText[0]}
       </div>
-      <div style={{ textAlign: "center"}}>
+      <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif'}}>
       {(alignment == "fr-FR") ? frenchText[1] : englishText[1]}
       </div>
-      <div style={{ textAlign: "center", fontWeight: "bold" }}>
+      <div style={{ textAlign: "center", fontWeight: "bold", fontFamily: 'Roboto, sans-serif' }}>
       {(alignment == "fr-FR") ? frenchText[2] : englishText[2]}
       </div>
-      <div style={{textAlign: "center"}}>
+      <div style={{textAlign: "center", fontFamily: 'Roboto, sans-serif'}}>
       {(alignment == "fr-FR") ? frenchText[3] : englishText[3]}
       </div>
     </Box>

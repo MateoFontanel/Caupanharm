@@ -71,7 +71,6 @@ const MatchesAccordion: FC<MatchesAccordionProps> = ({ playerId, data }) => {
     setExpanded(newExpanded ? panel : false);
   };
 
-  console.log(data[playerId]);
   return (
     <Box sx={{ width: '100%' }}>
       {data[playerId].matches.map((match, index) => (

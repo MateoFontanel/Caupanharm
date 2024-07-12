@@ -74,7 +74,7 @@ const Players: FC = () => {
 
   const renderPlayerStats = () => {
     if (hoveredPlayer === -1) {
-      return <>Selectionner un joueur pour voir ses stats</>;
+      return <div style={{fontFamily: 'Roboto, sans-serif'}}>Selectionner un joueur pour voir ses stats</div>;
     } else {
       return (
         <Grid
@@ -84,14 +84,14 @@ const Players: FC = () => {
           alignItems="center"
         >
           <Grid item>
-            <div style={{ textAlign: "center" }}>KD</div>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>KD</div>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>
               {additionalPlayersData[hoveredPlayer].stats.kd}
             </div>
           </Grid>
           <Grid item>
-            <div style={{ textAlign: "center" }}>KAST</div>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>KAST</div>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>
               {
                 +(
                   additionalPlayersData[hoveredPlayer].stats.kast * 100
@@ -101,14 +101,14 @@ const Players: FC = () => {
             </div>
           </Grid>
           <Grid item>
-            <div style={{ textAlign: "center" }}>ACS</div>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>ACS</div>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>
               {additionalPlayersData[hoveredPlayer].stats.acs}
             </div>
           </Grid>
           <Grid item>
-            <div style={{ textAlign: "center" }}>K/R</div>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>K/R</div>
+            <div style={{ textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>
               {additionalPlayersData[hoveredPlayer].stats.killsPerRound}
             </div>
           </Grid>
