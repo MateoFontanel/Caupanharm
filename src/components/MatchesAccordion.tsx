@@ -6,24 +6,8 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import {MatchesAccordionInterface} from "../interfaces"
 
-interface MatchInterface {
-  date: string,
-  map: string,
-  result: string,
-  allyScore: number,
-  enemyScore: number
-}
-
-interface PlayerInterface{
-  name: string,
-  matches: MatchInterface[]
-}
-
-interface MatchesAccordionProps {
-  playerId: number,
-  data: PlayerInterface[]
-}
 
 const Accordion = styled((props: any) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -61,7 +45,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-const MatchesAccordion: FC<MatchesAccordionProps> = ({ playerId, data }) => {
+const MatchesAccordion: FC<MatchesAccordionInterface> = ({ playerId, data }) => {
   const [expanded, setExpanded] = useState<string | false>();
 
   const handleChange = (panel: string) => (

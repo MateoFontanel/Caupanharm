@@ -22,8 +22,6 @@ const Navbar: FC = () => {
       "/matches": "matches",
       "/planning": "planning"
     };
-
-    // Set the active tab based on current location pathname
     setValue(pathToValueMap[location.pathname]);
   }, [location]);
 

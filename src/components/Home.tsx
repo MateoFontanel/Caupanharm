@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+
 const Home: FC = () => {
   const frenchText = [
     "Cette application est un \"tracker\" de statistiques de joueurs d'un jeu en ligne. Elle détaille une partie de leurs statistiques individuelles, ainsi que de leurs matchs récents et du dernier tournoi joué.",
@@ -18,6 +19,10 @@ const Home: FC = () => {
     "The current hosted project is a web app that uses React 18, Vite and Typescript. Its data is for now hardcoded."
   ]
 
+  
+
+
+
   const [alignment, setAlignment] = useState('fr-FR');
 
   const handleChange = (
@@ -28,29 +33,11 @@ const Home: FC = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: "center",
-        alignItems: "center",
-        p: 2,
-        marginLeft: "128px",
-        marginRight: "128px",
-        gap: 6
-      }}
-    >
-      <ToggleButtonGroup
-      size="small"
-      color="primary"
-      value={alignment}
-      exclusive
-      onChange={handleChange}
-      aria-label="Language"
-    >
-      <ToggleButton value="fr-FR">Français</ToggleButton>
-      <ToggleButton value="en-GB">English</ToggleButton>
-    </ToggleButtonGroup>
+    <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: "center", alignItems: "center", p: 2, marginLeft: "128px", marginRight: "128px", gap: 6}}>
+      <ToggleButtonGroup size="small" color="primary" value={alignment} exclusive onChange={handleChange} aria-label="Language">
+        <ToggleButton value="fr-FR">Français</ToggleButton>
+          <ToggleButton value="en-GB">English</ToggleButton>
+      </ToggleButtonGroup>
       <div style={{marginTop: "64px", textAlign: "center", fontFamily: 'Roboto, sans-serif' }}>
         {(alignment == "fr-FR") ? frenchText[0] : englishText[0]}
       </div>

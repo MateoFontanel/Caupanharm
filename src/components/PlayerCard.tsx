@@ -7,22 +7,10 @@ import CardActionArea from "@mui/material/CardActionArea";
 import { styled } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import * as Utils from "../utils";
+import {PlayerCardProps} from "../interfaces"
 
-import * as Utils from "../utils.js";
 
-interface PlayerCardProps {
-  id: number;
-  onClick: (id: number) => void;
-  width: string;
-  player: {
-    name: string;
-    stats: {
-      favoriteAgents: string[];
-      wins: number;
-      losses: number;
-    };
-  };
-}
 
 interface UserTypographyProps extends TypographyProps {
   component?: React.ElementType; // Permet à styled de prendre en charge la prop 'component'

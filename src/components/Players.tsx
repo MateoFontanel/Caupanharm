@@ -6,42 +6,14 @@ import MatchesAccordion from "./MatchesAccordion";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
+import {AdditionalPlayerDataInterface, PlayerMatchesInterface} from "../interfaces"
 
-interface AdditionalPlayerDataInterface {
-  name: string;
-  stats: {
-    rank: string;
-    favoriteAgents: string[];
-    kills: number;
-    deaths: number;
-    assists: number;
-    kast: number;
-    kd: number;
-    acs: number;
-    killsPerRound: number;
-    wins: number;
-    losses: number;
-  };
-}
-
-interface MatchInterface {
-  date: string;
-  map: string;
-  result: string;
-  allyScore: number;
-  enemyScore: number;
-}
-
-interface PlayerMatchInterface {
-  name: string;
-  matches: MatchInterface[];
-}
 
 const Players: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [hoveredPlayer, setHoveredPlayer] = useState<number>(-1);
   const [additionalPlayersData, setAdditionalPlayersData] = useState<AdditionalPlayerDataInterface[]>([]);
-  const [playersMatchesData, setPlayersMatchesData] = useState<PlayerMatchInterface[]>([]);
+  const [playersMatchesData, setPlayersMatchesData] = useState<PlayerMatchesInterface[]>([]);
   const cardsWidth = useRef<string>(`${90 / 7}vw`);
 
   useEffect(() => {
