@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -9,11 +9,23 @@ import GamesIcon from "@mui/icons-material/Games";
 import GroupsIcon from "@mui/icons-material/Groups";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { Link, Outlet } from "@tanstack/react-router";
+import { Link, Outlet, useLocation } from "@tanstack/react-router";
 
 const Navbar: FC = () => {
+  const location = useLocation();
   const [value, setValue] = React.useState("home");
+
+  useEffect(() => {
+    const pathToValueMap = {
+      "/": "home",
+      "/players": "players",
+      "/matches": "matches",
+      "/planning": "planning"
+    };
+
+    // Set the active tab based on current location pathname
+    setValue(pathToValueMap[location.pathname]);
+  }, [location]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
