@@ -40,7 +40,6 @@ const Navbar: FC = () => {
         </Toolbar>
       </AppBar>
       <Outlet />
-      <TanStackRouterDevtools position="bottom-right" />
     </>
   );
 };
