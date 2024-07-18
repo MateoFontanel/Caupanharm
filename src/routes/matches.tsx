@@ -1,13 +1,13 @@
 import React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import Matches from '../components/Matches'
+import Bracket from '../components/Bracket'
 
 export const Route = createFileRoute('/matches')({
-  component: MatchesComponent,
+  component: BracketComponent,
 })
 
-export function MatchesComponent() {
+export function BracketComponent() {
   return (
-    <Matches />
+    <Bracket />
   )
 }
