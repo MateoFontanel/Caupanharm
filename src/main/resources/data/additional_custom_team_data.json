@@ -1,0 +1,22 @@
+{
+  "overall": {
+    "wins": 9,
+    "losses": 10,
+    "ddr": 17,
+    "firstBlood": 0.5,
+    "kast": 0.713,
+    "clutch": 0.067
+  },
+  "attack": {
+    "winrate": 0.505,
+    "kd": 0.99,
+    "killsPerRound": 3.6,
+    "kast": 0.717
+  },
+  "defense": {
+    "winrate": 0.493,
+    "kd": 1.07,
+    "killsPerRound": 3.6,
+    "kast": 0.708
+  }
+}
