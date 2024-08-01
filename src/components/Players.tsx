@@ -2,7 +2,7 @@ import React, { useState, useRef, Suspense } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import PlayerCard from "./PlayerCard";
-import MatchesAccordion from "./MatchesAccordion";
+import DemoMatchesAccordion from "./DemoMatchesAccordion";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
@@ -32,7 +32,7 @@ function PlayersContent() {
   });
 
   const [hoveredPlayer, setHoveredPlayer] = useState<number>(-1);
-  const cardsWidth = useRef<string>(`${90 / 7}vw`);
+  const cardsWidth = useRef<string>(`${98 / 7}vw`);
 
   const handleCardClick = (id: number) => {
     setHoveredPlayer(id);
@@ -124,7 +124,7 @@ function PlayersContent() {
       );
     } else {
       return (
-        <MatchesAccordion playerId={hoveredPlayer} data={playersMatchesData} />
+        <DemoMatchesAccordion playerId={hoveredPlayer} data={playersMatchesData} />
       );
     }
   };

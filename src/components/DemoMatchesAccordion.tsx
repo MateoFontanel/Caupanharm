@@ -6,8 +6,7 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {MatchesAccordionInterface} from "../interfaces"
-
+import {DemoMatchesInterface} from "../interfaces/Interfaces"
 
 const Accordion = styled((props: any) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -45,7 +44,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-const MatchesAccordion: FC<MatchesAccordionInterface> = ({ playerId, data }) => {
+const MatchesAccordion: FC<DemoMatchesInterface> = ({data, playerId}) => {
   const [expanded, setExpanded] = useState<string | false>();
 
   const handleChange = (panel: string) => (
