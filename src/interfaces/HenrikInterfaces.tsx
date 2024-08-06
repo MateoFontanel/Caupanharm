@@ -22,6 +22,15 @@ export interface AccordionMatchElementProps {
   onChange: (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => void;
 }
 
+export interface DamageSummaryProps{
+  damage: Damage
+  teams: V1LifetimeMatchItemTeams
+}
+
+export interface ShotsSummaryProps{
+  shots: Shots
+}
+
 export interface MatchV4 {
   status: number;
   data: MatchV4Data;
@@ -93,7 +102,7 @@ interface Shots{
 }
 
 interface Damage{
-  dealt: number
+  made: number
   received: number
 }
 
@@ -152,7 +161,7 @@ interface Player {
   platform: string;
   party_id: string;
   agent: Agent;
-  stats: Stats;
+  stats: PlayerStats;
   ability_casts: Abilities;
   tier: Tier;
   card_id?: string;
@@ -185,7 +194,7 @@ interface FriendlyFire {
   outgoing: number;
 }
 
-interface Stats {
+interface PlayerStats {
   score: number;
   kills: number;
   deaths?: number;
@@ -193,10 +202,10 @@ interface Stats {
   bodyshots: number;
   headshots: number;
   legshots: number;
-  damage?: Damage;
+  damage?: PlayerDamage;
 }
 
-interface Damage {
+interface PlayerDamage {
   total: number;
   perRound: number;
 }
@@ -309,7 +318,7 @@ interface PlayerStats {
   ability_casts: Abilities;
   player: PlayerShort;
   damage_events: DamageEvents[];
-  stats: Stats;
+  stats: PlayerStats;
   economy: Economy;
   was_afk: boolean;
   received_penalty: boolean;
