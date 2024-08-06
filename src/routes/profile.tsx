@@ -1,6 +1,6 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import Profile from "../components/Profile";
+import Profile from "../components/profile/Profile";
 import { useLocation } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/profile")({

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
@@ -7,9 +7,9 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import {
   AccordionMatchElementProps,
-  MatchV4Data,
   V1LifetimeMatchItem,
-} from "../interfaces/HenrikInterfaces";
+} from "../../interfaces/HenrikInterfaces";
+import MatchSummary from "./MatchSummary";
 
 const Accordion = styled((props: any) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -80,7 +80,7 @@ const AccordionMatchElement: FC<AccordionMatchElementProps> = ({
         <Typography>{formatSummary(data)}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>{"WIP"}</Typography>
+        <MatchSummary data={data}/>
       </AccordionDetails>
     </Accordion>
   );

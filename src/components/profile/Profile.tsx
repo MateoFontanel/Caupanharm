@@ -1,19 +1,19 @@
 import React, { FC, Suspense, useState } from "react";
-import { ProfileProps } from "../interfaces/Interfaces";
+import { ProfileProps } from "../../interfaces/Interfaces";
 import {
   V1LifetimeMatches,
   HenrikErrorsInterface,
-} from "../interfaces/HenrikInterfaces";
-import Loader from "./Loader";
+} from "../../interfaces/HenrikInterfaces";
+import Loader from "../Loader";
 import {
   useSuspenseQuery,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { fetchPlayerMatches } from "../queries";
-import FullMatchAccordion from "../components/FullMatchesAccordion";
+import { fetchPlayerMatches } from "../../queries";
+import FullMatchAccordion from "./FullMatchesAccordion";
 import Box from "@mui/material/Box";
-import NavButtons from "./NavButtons";
+import NavButtons from "../NavButtons";
 
 const queryClient = new QueryClient({
   defaultOptions: {

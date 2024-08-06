@@ -4,8 +4,8 @@ import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { FullMatchesAccordionProps } from "../interfaces/HenrikInterfaces";
-import AccordionMatchElement from "../components/AccordionMatchElement";
+import { FullMatchesAccordionProps } from "../../interfaces/HenrikInterfaces";
+import AccordionMatchElement from "./AccordionMatchElement";
 
 const Accordion = styled((props: any) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
