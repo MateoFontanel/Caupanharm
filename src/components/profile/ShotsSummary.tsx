@@ -2,13 +2,13 @@ import React, { FC } from "react";
 import { ShotsSummaryProps } from "../../interfaces/HenrikInterfaces";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import "@mui/material/colors";
 
 const ShotsSummary: FC<ShotsSummaryProps> = ({ shots }) => {
   const totalShots = shots.head + shots.body + shots.leg;
   const headshotRate = Math.round((shots.head / totalShots) * 100 * 10) / 10;
   const bodyshotRate = Math.round((shots.body / totalShots) * 100 * 10) / 10;
   const legshotRate = Math.round((shots.leg / totalShots) * 100 * 10) / 10;
-
   const svgWidth = 88.4;
   const svgHeight = 105;
 
@@ -30,7 +30,7 @@ const ShotsSummary: FC<ShotsSummaryProps> = ({ shots }) => {
           <g>
             {/* Head */}
             <path
-              fill="rgba(0, 0, 0)"
+              fill={`#${mapHitrateToRgba(headshotRate)}`}
               d="M44.7 0Q50.7 1 51.7 5 54.7 16 51.7 22 50.7 23 48.7 23L54.7 27.4 34.7 27.4 40.7 23Q38.7 23 37.7 22 34.7 16 37.7 5 39.7 1 44.7 0"
             />
             {/* Head lines */}
@@ -75,5 +75,21 @@ const ShotsSummary: FC<ShotsSummaryProps> = ({ shots }) => {
     </Box>
   );
 };
+
+function mapHitrateToRgba(value: number){ // hitrate expressed in percentages 
+    switch(true){
+        case (value > 25):
+            return "5a9fe2" // blue
+        case (value > 20):
+            return "009587" // green
+        case (value > 15):
+            return "fad663" // yellow
+        case (value > 10):
+            return "f5955b" // orange
+        default: 
+        return "d1548d" // red
+    }
+}
+
 
 export default ShotsSummary;

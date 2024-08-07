@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import * as Utils from "../utils";
-import {PlayerCardProps} from "../interfaces"
+import {PlayerCardProps} from "../interfaces/Interfaces"
 
 
 

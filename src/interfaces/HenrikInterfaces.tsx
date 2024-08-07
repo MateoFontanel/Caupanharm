@@ -16,7 +16,7 @@ export interface FullMatchesAccordionProps {
 }
 
 export interface AccordionMatchElementProps {
-  id: number;
+  id: string;
   data: V1LifetimeMatchItem;
   expanded: string | false;
   onChange: (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => void;
