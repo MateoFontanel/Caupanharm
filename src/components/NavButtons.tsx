@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -19,49 +19,26 @@ export default function NavButtons({
   }, []);
 
   const handleDisplay = (event) => {
-    console.log("---------")
-    console.log("data size: ", dataSize)
-    console.log("page size: ", pageSize)
-    console.log("initial page: ", page)
     const requestedPage = (event.target.id === "prev") ? page-1 : page+1
     const lastPageSize = dataSize%pageSize
     const numberOfPages = (lastPageSize > 0) ? Math.floor(dataSize/pageSize) + 1 : Math.floor(dataSize/pageSize)
 
     if(requestedPage < 0) {
         setPage(0)
-        console.log("final page: ", 0 )
     }else if(requestedPage >= numberOfPages) {
         setPage(numberOfPages-1)
-        console.log("final page: ", numberOfPages-1)
     }else{
         setPage(requestedPage)
         setPrevButtonState(requestedPage > 0)
         setNextButtonState(requestedPage < numberOfPages-1)
-        console.log("final page: ", requestedPage)
     }
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
-      <Button
-        id="prev"
-        onClick={handleDisplay}
-        disabled={!prevButtonState}
-        variant="contained"
-        startIcon={<NavigateBeforeIcon />}
-      >
-        Page précédente
-      </Button>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "8px" }}>
+      <Button  id="prev" onClick={handleDisplay} disabled={!prevButtonState} variant="contained" startIcon={<NavigateBeforeIcon />}> Page précédente</Button> 
       Page {page+1}/{Math.floor(dataSize/pageSize)+1}
-      <Button
-        id="next"
-        onClick={handleDisplay}
-        disabled={!nextButtonState}
-        variant="contained"
-        endIcon={<NavigateNextIcon />}
-      >
-        Page suivante
-      </Button>
+      <Button id="next" onClick={handleDisplay} disabled={!nextButtonState} variant="contained" endIcon={<NavigateNextIcon />}> Page suivante</Button>
     </div>
   );
 }
